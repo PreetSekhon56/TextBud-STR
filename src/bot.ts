@@ -10,6 +10,7 @@ import {
   handlePropertySelectReply,
   clearPendingPropertySelect,
 } from './handlers/manage.js';
+import { registerEditHandlers, handleEditMessage, hasActiveEditSession } from './handlers/edit.js';
 import { Owner } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -22,6 +23,9 @@ registerManageHandlers(bot);
 
 // Register setup wizard handlers (photo handler + resume middleware)
 registerSetupHandlers(bot);
+
+// Register edit handlers (photo handler for edit sessions)
+registerEditHandlers(bot);
 
 // /start in DM: register as owner
 bot.start(async (ctx) => {
@@ -117,10 +121,12 @@ bot.on('text', async (ctx, next) => {
     return next();
   }
 
-  // Priority 5: Edit triggers (will be handled by edit handler registered after this)
-  // Check for edit-related keywords
-  if (/\b(edit|change|update|add|remove)\b/i.test(text)) {
-    return next();
+  // Priority 5: Active edit session or edit triggers
+  if (hasActiveEditSession(ownerTelegramId) || /\b(edit|change|update|add|remove)\b/i.test(text)) {
+    if (owner) {
+      const handled = await handleEditMessage(ctx);
+      if (handled) return;
+    }
   }
 
   // Priority 6: Unknown command -- show help
