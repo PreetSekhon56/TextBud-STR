@@ -87,3 +87,43 @@ export interface SetupSession {
   created_at: string;
   updated_at: string;
 }
+
+export interface CleaningSession {
+  id: number;
+  property_id: number;
+  cleaner_id: number;
+  chat_id: number;
+  clean_type: 'standard' | 'deep';
+  current_room_id: number | null;
+  entry_video_file_id: string | null;
+  checked_in_at: string;
+  completed_at: string | null;
+  summary: string | null;
+  created_at: string;
+}
+
+export interface MilestonePhoto {
+  id: number;
+  session_id: number;
+  room_id: number;
+  file_id: string;
+  attempt_number: number;
+  created_at: string;
+}
+
+export interface ComparisonResult {
+  id: number;
+  milestone_photo_id: number;
+  staging_photo_id: number;
+  passed: boolean;
+  issues: string | null;
+  raw_response: string | null;
+  created_at: string;
+}
+
+export interface SessionChecklistProgress {
+  id: number;
+  session_id: number;
+  checklist_item_id: number;
+  completed_at: string;
+}
