@@ -87,41 +87,41 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PROP-01 | — | Pending |
-| PROP-02 | — | Pending |
-| PROP-03 | — | Pending |
-| PROP-04 | — | Pending |
-| PROP-05 | — | Pending |
-| PROP-06 | — | Pending |
-| PROP-07 | — | Pending |
-| PROP-08 | — | Pending |
-| PROP-09 | — | Pending |
-| CLEAN-01 | — | Pending |
-| CLEAN-02 | — | Pending |
-| CLEAN-03 | — | Pending |
-| CLEAN-04 | — | Pending |
-| CLEAN-05 | — | Pending |
-| CLEAN-06 | — | Pending |
-| CLEAN-07 | — | Pending |
-| CLEAN-08 | — | Pending |
-| REPT-01 | — | Pending |
-| REPT-02 | — | Pending |
-| REPT-03 | — | Pending |
-| REPT-04 | — | Pending |
-| REPT-05 | — | Pending |
-| GUEST-01 | — | Pending |
-| GUEST-02 | — | Pending |
-| GUEST-03 | — | Pending |
-| COMM-01 | — | Pending |
-| COMM-02 | — | Pending |
-| COMM-03 | — | Pending |
-| COMM-04 | — | Pending |
+| PROP-01 | Phase 1 | Pending |
+| PROP-02 | Phase 1 | Pending |
+| PROP-03 | Phase 1 | Pending |
+| PROP-04 | Phase 1 | Pending |
+| PROP-05 | Phase 1 | Pending |
+| PROP-06 | Phase 1 | Pending |
+| PROP-07 | Phase 1 | Pending |
+| PROP-08 | Phase 2 | Pending |
+| PROP-09 | Phase 2 | Pending |
+| CLEAN-01 | Phase 2 | Pending |
+| CLEAN-02 | Phase 2 | Pending |
+| CLEAN-03 | Phase 2 | Pending |
+| CLEAN-04 | Phase 2 | Pending |
+| CLEAN-05 | Phase 2 | Pending |
+| CLEAN-06 | Phase 2 | Pending |
+| CLEAN-07 | Phase 2 | Pending |
+| CLEAN-08 | Phase 2 | Pending |
+| REPT-01 | Phase 3 | Pending |
+| REPT-02 | Phase 3 | Pending |
+| REPT-03 | Phase 3 | Pending |
+| REPT-04 | Phase 3 | Pending |
+| REPT-05 | Phase 3 | Pending |
+| GUEST-01 | Phase 4 | Pending |
+| GUEST-02 | Phase 4 | Pending |
+| GUEST-03 | Phase 4 | Pending |
+| COMM-01 | Phase 1 | Pending |
+| COMM-02 | Phase 1 | Pending |
+| COMM-03 | Phase 1 | Pending |
+| COMM-04 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 29 total
-- Mapped to phases: 0
-- Unmapped: 29 ⚠️
+- Mapped to phases: 29
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-24 after initial definition*
+*Last updated: 2026-03-24 after roadmap creation*

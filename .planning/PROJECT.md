@@ -2,7 +2,7 @@
 
 ## What This Is
 
-TextBud is a text-based operations assistant that manages the full cleaning workflow — property setup, cleaner onboarding, real-time milestone tracking, AI photo verification, inventory management, and guest support — entirely through Telegram group chats. No app. No dashboard. Just text. The initial wedge is short-term rental (STR) operators, but the real market is anyone who manages cleaners — including regular homeowners.
+TextBud is a text-based operations assistant that manages the full cleaning workflow — property setup, cleaner onboarding, real-time milestone tracking, AI photo verification, inventory management, and guest support — entirely through Telegram group chats. No app. No dashboard. Just text. One product serving two markets simultaneously: short-term rental (STR) operators and regular homeowners who manage cleaners. The core cleaning workflow is shared; guest features (FAQ, guidebook, guest chat) are optional per property.
 
 ## Core Value
 
