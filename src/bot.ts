@@ -13,6 +13,7 @@ import {
 import { registerEditHandlers, handleEditMessage, hasActiveEditSession } from './handlers/edit.js';
 import { registerCleaningHandlers, handleGroupMessage } from './handlers/cleaning.js';
 import { registerChecklistHandlers } from './handlers/cleaning-checklist.js';
+import { registerPhotoHandlers } from './handlers/cleaning-photos.js';
 import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -32,6 +33,7 @@ registerEditHandlers(bot);
 // Register cleaning workflow handlers (video, checklist callbacks)
 registerCleaningHandlers(bot);
 registerChecklistHandlers(bot);
+registerPhotoHandlers(bot);
 
 // /start in DM: register as owner
 bot.start(async (ctx) => {

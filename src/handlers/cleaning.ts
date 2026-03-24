@@ -102,6 +102,114 @@ function reloadActiveSessions(): void {
   }
 }
 
+// --- Pending skip decisions for completion flow ---
+
+const pendingSkipDecisions = new Map<number, { session: ActiveCleaningSession; missingRooms: string[] }>();
+
+// --- Completion helper functions ---
+
+export function calculateDuration(start: string, end: string): string {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+  const diffMs = endDate.getTime() - startDate.getTime();
+  const totalMinutes = Math.floor(diffMs / 60000);
+
+  if (totalMinutes >= 60) {
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${hours}h ${minutes}m`;
+  }
+  return `${totalMinutes}m`;
+}
+
+export function getComparisonSummary(sessionId: number): { passed: number; flagged: number; total: number } {
+  const db = getDb();
+  const row = db.prepare(`
+    SELECT
+      COUNT(*) as total,
+      SUM(CASE WHEN passed = 1 THEN 1 ELSE 0 END) as passed
+    FROM comparison_results cr
+    JOIN milestone_photos mp ON cr.milestone_photo_id = mp.id
+    WHERE mp.session_id = ?
+    AND cr.id IN (
+      SELECT MAX(cr2.id) FROM comparison_results cr2
+      JOIN milestone_photos mp2 ON cr2.milestone_photo_id = mp2.id
+      WHERE mp2.session_id = ? GROUP BY mp2.room_id
+    )
+  `).get(sessionId, sessionId) as { total: number; passed: number } | undefined;
+
+  const total = row?.total || 0;
+  const passed = row?.passed || 0;
+  return { passed, flagged: total - passed, total };
+}
+
+export function getRoomsWithoutPhotos(sessionId: number, rooms: Room[]): string[] {
+  const db = getDb();
+  const propertyId = rooms.length > 0 ? rooms[0].property_id : 0;
+  const rows = db.prepare(`
+    SELECT r.name FROM rooms r
+    WHERE r.property_id = ? AND r.id NOT IN (
+      SELECT DISTINCT room_id FROM milestone_photos WHERE session_id = ?
+    ) ORDER BY r.sort_order
+  `).all(propertyId, sessionId) as { name: string }[];
+  return rows.map(r => r.name);
+}
+
+export async function handleCompletion(ctx: Context, session: ActiveCleaningSession, skip = false): Promise<void> {
+  const db = getDb();
+  const chatId = ctx.chat!.id;
+
+  if (!skip) {
+    // Check for rooms without photos
+    const missingRooms = getRoomsWithoutPhotos(session.sessionId, session.rooms);
+    if (missingRooms.length > 0 && !pendingSkipDecisions.has(chatId)) {
+      pendingSkipDecisions.set(chatId, { session, missingRooms });
+      const roomList = missingRooms.join(', ');
+      await ctx.reply(
+        `You haven't sent photos for: ${roomList}.\n\nSend 'skip' to finish without them, or send a photo for any missing room.`
+      );
+      return;
+    }
+  }
+
+  // Complete the session
+  db.prepare('UPDATE cleaning_sessions SET completed_at = datetime(\'now\') WHERE id = ?')
+    .run(session.sessionId);
+
+  db.prepare('UPDATE properties SET clean_count = clean_count + 1 WHERE id = ?')
+    .run(session.propertyId);
+
+  // Remove from in-memory maps
+  activeSessions.delete(chatId);
+  pendingSkipDecisions.delete(chatId);
+
+  // Get session details for summary
+  const sessionRow = db.prepare('SELECT * FROM cleaning_sessions WHERE id = ?')
+    .get(session.sessionId) as CleaningSession;
+
+  const property = db.prepare('SELECT * FROM properties WHERE id = ?')
+    .get(session.propertyId) as Property;
+
+  const cleaner = db.prepare('SELECT * FROM cleaners WHERE id = ?')
+    .get(session.cleanerId) as Cleaner;
+
+  // Calculate duration
+  const now = new Date().toISOString();
+  const duration = calculateDuration(sessionRow.checked_in_at, now);
+
+  // Get comparison summary
+  const comparison = getComparisonSummary(session.sessionId);
+
+  // Build summary message
+  const summaryText = `All done! Cleaned ${property.name} in ${duration}.\n${comparison.passed}/${comparison.total} rooms passed. ${comparison.flagged} flagged.\nThanks, ${cleaner.first_name}!`;
+
+  await ctx.reply(summaryText);
+
+  // Store summary in DB
+  db.prepare('UPDATE cleaning_sessions SET summary = ? WHERE id = ?')
+    .run(summaryText, session.sessionId);
+}
+
 // --- Group message handler ---
 
 export async function handleGroupMessage(ctx: Context, group: TelegramGroup): Promise<void> {
@@ -117,15 +225,25 @@ export async function handleGroupMessage(ctx: Context, group: TelegramGroup): Pr
     if (existingSession.waitingForPhoto) return; // waiting for milestone photo
   }
 
+  // Handle pending skip decision
+  if (pendingSkipDecisions.has(chatId) && /^skip$/i.test(text.trim())) {
+    const pending = pendingSkipDecisions.get(chatId)!;
+    await handleCompletion(ctx, pending.session, true);
+    return;
+  }
+
   // Check-in intent
   if (isCheckInIntent(text)) {
     await handleCheckIn(ctx, group);
     return;
   }
 
-  // Completion intent -- delegate to Plan 03
+  // Completion intent
   if (isCompletionIntent(text)) {
-    // TODO: Plan 03 will implement completion handler
+    const session = activeSessions.get(chatId);
+    if (session) {
+      await handleCompletion(ctx, session);
+    }
     return;
   }
 
