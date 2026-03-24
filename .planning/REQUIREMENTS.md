@@ -45,9 +45,9 @@
 ### Communication
 
 - [x] **COMM-01**: All cleaning interactions happen in three-way Telegram groups (owner + cleaner + bot)
-- [ ] **COMM-02**: Cleaning groups are persistent per cleaner
+- [x] **COMM-02**: Cleaning groups are persistent per cleaner
 - [ ] **COMM-03**: Owner can edit checklists, instructions, and property info on the fly via text from any thread
-- [ ] **COMM-04**: Bot carries property knowledge into any new group automatically
+- [x] **COMM-04**: Bot carries property knowledge into any new group automatically
 
 ### Payments
 
@@ -120,9 +120,9 @@
 | GUEST-02 | Phase 4 | Pending |
 | GUEST-03 | Phase 4 | Pending |
 | COMM-01 | Phase 1 | Complete |
-| COMM-02 | Phase 1 | Pending |
+| COMM-02 | Phase 1 | Complete |
 | COMM-03 | Phase 1 | Pending |
-| COMM-04 | Phase 1 | Pending |
+| COMM-04 | Phase 1 | Complete |
 | PAY-01 | Phase 5 | Pending |
 | PAY-02 | Phase 5 | Pending |
 | PAY-03 | Phase 5 | Pending |
