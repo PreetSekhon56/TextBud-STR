@@ -12,19 +12,18 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Owner can set up a property through guided text conversation (rooms, staging photos, FAQ/guidebook, checklists, deep clean schedule) — *Validated in Phase 1: Foundation & Property Setup*
+- [x] All interactions are three-way Telegram groups (owner + other party + bot) — *Validated in Phase 1*
+- [x] Owner can manage multiple properties — *Validated in Phase 1*
+- [x] Everything is editable on the fly via text (checklists, instructions, property info) from group or personal thread — *Validated in Phase 1*
 
 ### Active
 
-- [ ] Owner can set up a property through guided text conversation (rooms, staging photos, FAQ/guidebook, checklists, deep clean schedule)
 - [ ] Cleaner checks in via text, receives sequential room-by-room checklist, and records entry video walkthrough on arrival
 - [ ] TextBud requests milestone photos at timed intervals and compares them to staging photos using Claude Vision
 - [ ] Owner receives completion report with photos, AI assessments, duration, flagged items, and checklist status
 - [ ] Inventory walkthrough after each clean with item-by-item counts and low-stock alerts to owner
 - [ ] Guest can text for property info; unknown questions flagged to owner (self-improving knowledge base)
-- [ ] All interactions are three-way Telegram groups (owner + other party + bot)
-- [ ] Owner can manage multiple properties
-- [ ] Everything is editable on the fly via text (checklists, instructions, property info) from group or personal thread
 - [ ] Inventory data collection to support future backend ordering system
 
 ### Out of Scope
@@ -72,4 +71,4 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 | Sequential checklist delivery | Guide cleaners through the process rather than overwhelming with full list | — Pending |
 
 ---
-*Last updated: 2026-03-24 after initialization*
+*Last updated: 2026-03-24 — Phase 1 (Foundation & Property Setup) complete*
