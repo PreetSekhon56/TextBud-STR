@@ -11,7 +11,9 @@ import {
   clearPendingPropertySelect,
 } from './handlers/manage.js';
 import { registerEditHandlers, handleEditMessage, hasActiveEditSession } from './handlers/edit.js';
-import { Owner } from './types/index.js';
+import { registerCleaningHandlers, handleGroupMessage } from './handlers/cleaning.js';
+import { registerChecklistHandlers } from './handlers/cleaning-checklist.js';
+import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
@@ -26,6 +28,10 @@ registerSetupHandlers(bot);
 
 // Register edit handlers (photo handler for edit sessions)
 registerEditHandlers(bot);
+
+// Register cleaning workflow handlers (video, checklist callbacks)
+registerCleaningHandlers(bot);
+registerChecklistHandlers(bot);
 
 // /start in DM: register as owner
 bot.start(async (ctx) => {
@@ -138,6 +144,20 @@ bot.on('text', async (ctx, next) => {
       '- "edit [something]" to change property details'
     );
   }
+});
+
+// Group chat text routing for cleaning workflow
+bot.on('text', async (ctx) => {
+  if (ctx.chat.type === 'private') return; // DM handler above handles these
+
+  const db = getDb();
+  const group = db.prepare(
+    'SELECT * FROM telegram_groups WHERE chat_id = ? AND is_active = 1'
+  ).get(ctx.chat.id) as TelegramGroup | undefined;
+
+  if (!group) return; // Not a linked group, ignore
+
+  await handleGroupMessage(ctx, group);
 });
 
 // Helper: check if a message is from a DM (private chat)
