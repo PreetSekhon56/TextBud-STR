@@ -1,14 +1,26 @@
 import { Telegraf, Context } from 'telegraf';
 import { getDb } from './db/connection.js';
 import { registerGroupHandlers, hasPendingGroupLink, handlePropertySelection } from './handlers/groups.js';
-import { registerSetupHandlers } from './handlers/setup.js';
+import { registerSetupHandlers, getActiveSession } from './handlers/setup.js';
+import {
+  registerManageHandlers,
+  isManageTrigger,
+  handleListProperties,
+  hasPendingPropertySelect,
+  handlePropertySelectReply,
+  clearPendingPropertySelect,
+} from './handlers/manage.js';
+import { Owner } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
 
 // Register group detection and property linking handlers
 registerGroupHandlers(bot);
 
-// Register setup wizard handlers (must be after group handlers so group link takes priority)
+// Register manage handlers (mostly exports, actual routing in central DM router below)
+registerManageHandlers(bot);
+
+// Register setup wizard handlers (photo handler + resume middleware)
 registerSetupHandlers(bot);
 
 // /start in DM: register as owner
@@ -29,8 +41,6 @@ bot.start(async (ctx) => {
       first_name = excluded.first_name
   `).run(telegramId, username, firstName);
 
-  const owner = db.prepare('SELECT * FROM owners WHERE telegram_id = ?').get(telegramId);
-
   await ctx.reply(
     `Welcome to TextBud, ${firstName}! I'm your cleaning operations assistant.\n\n` +
     `I help you manage your properties and cleaning teams right here in Telegram.\n\n` +
@@ -38,19 +48,90 @@ bot.start(async (ctx) => {
   );
 });
 
-// DM text handler: route property selection numbers when there's a pending group link
+/**
+ * Central DM text router with priority ordering:
+ * 1. Pending group link (number = property selection for group)
+ * 2. Pending property select from "my properties" list
+ * 3. Active setup session (route to setup handlers via next())
+ * 4. Property management triggers ("my properties", "new property")
+ * 5. Edit triggers (handled in edit handler via next())
+ * 6. Unknown: help message
+ */
 bot.on('text', async (ctx, next) => {
   if (ctx.chat.type !== 'private') return next();
   if (!ctx.from) return next();
 
-  // If this owner has a pending group link and sent a number, handle property selection
-  if (hasPendingGroupLink(ctx.from.id)) {
+  const ownerTelegramId = ctx.from.id;
+  const text = (ctx.message as { text: string }).text.trim();
+
+  // Priority 1: Pending group link
+  if (hasPendingGroupLink(ownerTelegramId)) {
     const handled = await handlePropertySelection(ctx);
     if (handled) return;
   }
 
-  // Otherwise, pass to next handler (future setup handlers, etc.)
-  return next();
+  // Priority 2: Pending property select (from "my properties" list)
+  if (hasPendingPropertySelect(ownerTelegramId)) {
+    // If they typed a manage trigger or "new property", clear the pending select and handle normally
+    if (isManageTrigger(text) || /^new property$/i.test(text) || /^cancel setup$/i.test(text)) {
+      clearPendingPropertySelect(ownerTelegramId);
+      // fall through to normal handling below
+    } else {
+      const handled = await handlePropertySelectReply(ctx);
+      if (handled) return;
+      // If not a valid number, clear pending and fall through
+      clearPendingPropertySelect(ownerTelegramId);
+    }
+  }
+
+  // Get owner (needed for remaining checks)
+  const owner = getOwnerByTelegramId(ownerTelegramId) as Owner | null;
+
+  // Priority 3: Active setup session -- let setup handlers handle it
+  // (except for manage triggers which should still work during setup)
+  if (owner && !isManageTrigger(text)) {
+    const session = getActiveSession(owner.id);
+    if (session) {
+      // "new property" during active setup is handled by setup handler
+      return next();
+    }
+  }
+
+  // Priority 4: Property management triggers
+  if (isManageTrigger(text)) {
+    if (!owner) {
+      await ctx.reply('Please send /start first to register.');
+      return;
+    }
+    await handleListProperties(ctx, owner);
+    return;
+  }
+
+  // "new property" -- let setup handler handle it
+  if (/^new property$/i.test(text)) {
+    return next();
+  }
+
+  // "cancel setup" -- let setup handler handle it
+  if (/^cancel setup$/i.test(text)) {
+    return next();
+  }
+
+  // Priority 5: Edit triggers (will be handled by edit handler registered after this)
+  // Check for edit-related keywords
+  if (/\b(edit|change|update|add|remove)\b/i.test(text)) {
+    return next();
+  }
+
+  // Priority 6: Unknown command -- show help
+  if (owner) {
+    await ctx.reply(
+      "I didn't understand that. You can say:\n" +
+      '- "my properties" to list your properties\n' +
+      '- "new property" to set up a new one\n' +
+      '- "edit [something]" to change property details'
+    );
+  }
 });
 
 // Helper: check if a message is from a DM (private chat)
