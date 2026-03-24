@@ -13,7 +13,7 @@
 - [x] **PROP-04**: Owner can build property FAQ/guidebook via Q&A (WiFi, parking, trash, appliances, house rules, emergency contacts)
 - [x] **PROP-05**: Owner can set deep clean cycle (every Nth clean)
 - [x] **PROP-06**: Owner can create standard clean checklist and deep clean checklist
-- [ ] **PROP-07**: Owner can manage multiple properties
+- [x] **PROP-07**: Owner can manage multiple properties
 - [ ] **PROP-08**: AI generates rough floor plan/room layout from cleaner's entry walkthrough video using Claude Vision
 - [ ] **PROP-09**: Floor plan available to cleaners and guests as a navigational reference
 
@@ -46,7 +46,7 @@
 
 - [x] **COMM-01**: All cleaning interactions happen in three-way Telegram groups (owner + cleaner + bot)
 - [x] **COMM-02**: Cleaning groups are persistent per cleaner
-- [ ] **COMM-03**: Owner can edit checklists, instructions, and property info on the fly via text from any thread
+- [x] **COMM-03**: Owner can edit checklists, instructions, and property info on the fly via text from any thread
 - [x] **COMM-04**: Bot carries property knowledge into any new group automatically
 
 ### Payments
@@ -100,7 +100,7 @@
 | PROP-04 | Phase 1 | Complete |
 | PROP-05 | Phase 1 | Complete |
 | PROP-06 | Phase 1 | Complete |
-| PROP-07 | Phase 1 | Pending |
+| PROP-07 | Phase 1 | Complete |
 | PROP-08 | Phase 2 | Pending |
 | PROP-09 | Phase 2 | Pending |
 | CLEAN-01 | Phase 2 | Pending |
@@ -121,7 +121,7 @@
 | GUEST-03 | Phase 4 | Pending |
 | COMM-01 | Phase 1 | Complete |
 | COMM-02 | Phase 1 | Complete |
-| COMM-03 | Phase 1 | Pending |
+| COMM-03 | Phase 1 | Complete |
 | COMM-04 | Phase 1 | Complete |
 | PAY-01 | Phase 5 | Pending |
 | PAY-02 | Phase 5 | Pending |

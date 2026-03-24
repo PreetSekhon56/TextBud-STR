@@ -12,7 +12,7 @@ TextBud delivers a complete text-based cleaning operations workflow through Tele
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation & Property Setup** - Telegram bot, three-way groups, property configuration via guided conversation
+- [x] **Phase 1: Foundation & Property Setup** - Telegram bot, three-way groups, property configuration via guided conversation (completed 2026-03-24)
 - [ ] **Phase 2: Cleaning Workflow** - Cleaner check-in, sequential checklists, entry video, AI photo comparison, real-time flagging
 - [ ] **Phase 3: Reporting & Inventory** - Completion reports, inventory walkthrough, AI inventory detection, low-stock alerts
 - [ ] **Phase 4: Guest Support** - Guest FAQ answers, unknown question routing, self-improving knowledge base
@@ -101,7 +101,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Property Setup | 1/4 | In Progress|  |
+| 1. Foundation & Property Setup | 4/4 | Complete   | 2026-03-24 |
 | 2. Cleaning Workflow | 0/? | Not started | - |
 | 3. Reporting & Inventory | 0/? | Not started | - |
 | 4. Guest Support | 0/? | Not started | - |
