@@ -30,11 +30,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Owner can manage multiple properties and switch between them via text
   4. Owner can edit any property detail (checklists, FAQ, room info) on the fly from any thread
   5. Bot automatically brings property knowledge into new groups when a cleaner is added
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md -- Project scaffolding, database schema, Telegram bot skeleton with owner registration
+- [ ] 01-02-PLAN.md -- Guided property setup conversation (rooms, photos, FAQ, checklists, deep clean cycle)
+- [ ] 01-03-PLAN.md -- Three-way group detection, property linking, cleaner onboarding
+- [ ] 01-04-PLAN.md -- Multi-property management and on-the-fly editing
 
 ### Phase 2: Cleaning Workflow
 **Goal**: Cleaners execute the full cleaning loop -- check-in, entry video, sequential room-by-room checklists, milestone photos with AI comparison, and real-time feedback
@@ -99,7 +101,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Property Setup | 0/? | Not started | - |
+| 1. Foundation & Property Setup | 0/4 | Planning complete | - |
 | 2. Cleaning Workflow | 0/? | Not started | - |
 | 3. Reporting & Inventory | 0/? | Not started | - |
 | 4. Guest Support | 0/? | Not started | - |
