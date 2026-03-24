@@ -19,14 +19,14 @@
 
 ### Cleaning Workflow
 
-- [ ] **CLEAN-01**: Cleaner can check in via text and receive clean type, checklist, and special instructions
-- [ ] **CLEAN-02**: Clock starts on check-in and stops on completion
-- [ ] **CLEAN-03**: Cleaner records entry video walkthrough of property on arrival
-- [ ] **CLEAN-04**: Checklist is delivered sequentially room-by-room as cleaner progresses
-- [ ] **CLEAN-05**: TextBud requests milestone photos at timed intervals from specific rooms
-- [ ] **CLEAN-06**: AI compares milestone photos to staging photos using Claude Vision
-- [ ] **CLEAN-07**: TextBud flags issues to cleaner in real time based on AI comparison
-- [ ] **CLEAN-08**: Cleaner marks completion, submits any remaining photos
+- [x] **CLEAN-01**: Cleaner can check in via text and receive clean type, checklist, and special instructions
+- [x] **CLEAN-02**: Clock starts on check-in and stops on completion
+- [x] **CLEAN-03**: Cleaner records entry video walkthrough of property on arrival
+- [x] **CLEAN-04**: Checklist is delivered sequentially room-by-room as cleaner progresses
+- [x] **CLEAN-05**: TextBud requests milestone photos at timed intervals from specific rooms
+- [x] **CLEAN-06**: AI compares milestone photos to staging photos using Claude Vision
+- [x] **CLEAN-07**: TextBud flags issues to cleaner in real time based on AI comparison
+- [x] **CLEAN-08**: Cleaner marks completion, submits any remaining photos
 
 ### Reporting
 
@@ -103,14 +103,14 @@
 | PROP-07 | Phase 1 | Complete |
 | PROP-08 | Phase 2 | Pending |
 | PROP-09 | Phase 2 | Pending |
-| CLEAN-01 | Phase 2 | Pending |
-| CLEAN-02 | Phase 2 | Pending |
-| CLEAN-03 | Phase 2 | Pending |
-| CLEAN-04 | Phase 2 | Pending |
-| CLEAN-05 | Phase 2 | Pending |
-| CLEAN-06 | Phase 2 | Pending |
-| CLEAN-07 | Phase 2 | Pending |
-| CLEAN-08 | Phase 2 | Pending |
+| CLEAN-01 | Phase 2 | Complete |
+| CLEAN-02 | Phase 2 | Complete |
+| CLEAN-03 | Phase 2 | Complete |
+| CLEAN-04 | Phase 2 | Complete |
+| CLEAN-05 | Phase 2 | Complete |
+| CLEAN-06 | Phase 2 | Complete |
+| CLEAN-07 | Phase 2 | Complete |
+| CLEAN-08 | Phase 2 | Complete |
 | REPT-01 | Phase 3 | Pending |
 | REPT-02 | Phase 3 | Pending |
 | REPT-03 | Phase 3 | Pending |
