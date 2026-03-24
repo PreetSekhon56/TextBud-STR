@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-03-24T15:46:10.445Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-03-24T15:53:00.259Z"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -24,7 +24,7 @@ See: .planning/PROJECT.md (updated 2026-03-24)
 ## Current Position
 
 Phase: 02 (cleaning-workflow) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Plan: 2 of 3
 | Phase 01 P02 | 4min | 2 tasks | 8 files |
 | Phase 01 P04 | 4min | 2 tasks | 3 files |
 | Phase 02 P01 | 3min | 2 tasks | 12 files |
+| Phase 02 P02 | 5min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Keyword-based edit routing for natural language UX rather than strict command prefixes
 - [Phase 02]: Dynamic migration runner: schema.ts reads all .sql files from migrations/ directory
 - [Phase 02]: Separate tsconfig.test.json for Jest with isolatedModules and jest types
+- [Phase 02]: moduleNameMapper in jest.config.ts to strip .js extensions for ts-jest resolution
+- [Phase 02]: ActiveCleaningSession in-memory Map keyed by chatId with DB reload on startup for restart resilience
+- [Phase 02]: Milestone photo request on room completion blocks auto-advance; Plan 03 handles photo receipt and next room
 
 ### Pending Todos
 
@@ -83,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T15:46:10.443Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-03-24T15:53:00.257Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
