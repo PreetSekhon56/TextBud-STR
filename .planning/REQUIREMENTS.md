@@ -9,10 +9,10 @@
 
 - [x] **PROP-01**: Owner can set up a property through guided text conversation
 - [x] **PROP-02**: Owner can define rooms for a property (room-by-room structure)
-- [ ] **PROP-03**: Owner can send staging photos per room as reference standard
-- [ ] **PROP-04**: Owner can build property FAQ/guidebook via Q&A (WiFi, parking, trash, appliances, house rules, emergency contacts)
-- [ ] **PROP-05**: Owner can set deep clean cycle (every Nth clean)
-- [ ] **PROP-06**: Owner can create standard clean checklist and deep clean checklist
+- [x] **PROP-03**: Owner can send staging photos per room as reference standard
+- [x] **PROP-04**: Owner can build property FAQ/guidebook via Q&A (WiFi, parking, trash, appliances, house rules, emergency contacts)
+- [x] **PROP-05**: Owner can set deep clean cycle (every Nth clean)
+- [x] **PROP-06**: Owner can create standard clean checklist and deep clean checklist
 - [ ] **PROP-07**: Owner can manage multiple properties
 - [ ] **PROP-08**: AI generates rough floor plan/room layout from cleaner's entry walkthrough video using Claude Vision
 - [ ] **PROP-09**: Floor plan available to cleaners and guests as a navigational reference
@@ -96,10 +96,10 @@
 |-------------|-------|--------|
 | PROP-01 | Phase 1 | Complete |
 | PROP-02 | Phase 1 | Complete |
-| PROP-03 | Phase 1 | Pending |
-| PROP-04 | Phase 1 | Pending |
-| PROP-05 | Phase 1 | Pending |
-| PROP-06 | Phase 1 | Pending |
+| PROP-03 | Phase 1 | Complete |
+| PROP-04 | Phase 1 | Complete |
+| PROP-05 | Phase 1 | Complete |
+| PROP-06 | Phase 1 | Complete |
 | PROP-07 | Phase 1 | Pending |
 | PROP-08 | Phase 2 | Pending |
 | PROP-09 | Phase 2 | Pending |

@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-03-24T09:17:08.679Z"
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-03-24T09:18:46.602Z"
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
 ---
 
 # Project State
@@ -47,6 +47,7 @@ Plan: 3 of 4
 
 *Updated after each plan completion*
 | Phase 01 P03 | 3min | 1 tasks | 2 files |
+| Phase 01 P02 | 4min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -63,6 +64,8 @@ Recent decisions affecting current work:
 - __dirname for path resolution instead of import.meta.dirname in CJS (01-01)
 - [Phase 01]: In-memory Map for pending group links (MVP-appropriate, avoids extra DB table)
 - [Phase 01]: Handler module pattern: registerXHandlers(bot) exported from handler files, called in bot.ts
+- [Phase 01]: In-memory Maps for FAQ and checklist sub-step tracking (keyed by owner ID) for transient session state
+- [Phase 01]: Setup step handlers return string literals for orchestrator routing (step_complete, waiting, next_room, complete)
 
 ### Pending Todos
 
@@ -74,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-24T09:17:08.674Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-03-24T09:18:46.600Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None
