@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2: Cleaning Workflow** - Cleaner check-in, sequential checklists, entry video, AI photo comparison, real-time flagging
 - [ ] **Phase 3: Reporting & Inventory** - Completion reports, inventory walkthrough, AI inventory detection, low-stock alerts
 - [ ] **Phase 4: Guest Support** - Guest FAQ answers, unknown question routing, self-improving knowledge base
+- [ ] **Phase 5: Payments** - Telegram Payments via Stripe, per-property subscriptions, Apple Pay / Google Pay
 
 ## Phase Details
 
@@ -78,10 +79,23 @@ Plans:
 Plans:
 - [ ] 04-01: TBD
 
+### Phase 5: Payments
+**Goal**: Owners can subscribe and pay for TextBud per property via Telegram Payments with Apple Pay / Google Pay
+**Depends on**: Phase 1
+**Requirements**: PAY-01, PAY-02, PAY-03, PAY-04
+**Success Criteria** (what must be TRUE):
+  1. Owner can subscribe to TextBud via Telegram Payments using Apple Pay or Google Pay (Stripe backend)
+  2. Subscription is billed per property per month — adding/removing properties adjusts billing automatically
+  3. Owner can view subscription status and cancel via text conversation with the bot
+**Plans**: TBD
+
+Plans:
+- [ ] 05-01: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -89,3 +103,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Cleaning Workflow | 0/? | Not started | - |
 | 3. Reporting & Inventory | 0/? | Not started | - |
 | 4. Guest Support | 0/? | Not started | - |
+| 5. Payments | 0/? | Not started | - |

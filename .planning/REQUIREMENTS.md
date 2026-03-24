@@ -49,6 +49,13 @@
 - [ ] **COMM-03**: Owner can edit checklists, instructions, and property info on the fly via text from any thread
 - [ ] **COMM-04**: Bot carries property knowledge into any new group automatically
 
+### Payments
+
+- [ ] **PAY-01**: Owner can subscribe to TextBud via Telegram Payments (Stripe backend, Apple Pay / Google Pay)
+- [ ] **PAY-02**: Subscription is billed per property per month
+- [ ] **PAY-03**: Owner can add/remove properties and billing adjusts automatically
+- [ ] **PAY-04**: Owner can view subscription status and cancel via text
+
 ## v2 Requirements
 
 ### Communication
@@ -76,7 +83,7 @@
 | Feature | Reason |
 |---------|--------|
 | Smart home / door codes / auto-unlock | Not core to cleaning workflow |
-| Payment processing | Defer to post-MVP |
+| Payment processing beyond subscriptions | Complex billing (invoicing, refunds, etc.) deferred |
 | Owner dashboard / web portal | Text-first, no dashboard |
 | Mobile app | Telegram is the interface |
 | Supply e-commerce / ordering | MVP collects data, ordering is post-MVP |
@@ -116,10 +123,14 @@
 | COMM-02 | Phase 1 | Pending |
 | COMM-03 | Phase 1 | Pending |
 | COMM-04 | Phase 1 | Pending |
+| PAY-01 | Phase 5 | Pending |
+| PAY-02 | Phase 5 | Pending |
+| PAY-03 | Phase 5 | Pending |
+| PAY-04 | Phase 5 | Pending |
 
 **Coverage:**
-- v1 requirements: 29 total
-- Mapped to phases: 29
+- v1 requirements: 33 total
+- Mapped to phases: 33
 - Unmapped: 0
 
 ---
