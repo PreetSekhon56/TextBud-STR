@@ -7,8 +7,8 @@
 
 ### Property Setup
 
-- [ ] **PROP-01**: Owner can set up a property through guided text conversation
-- [ ] **PROP-02**: Owner can define rooms for a property (room-by-room structure)
+- [x] **PROP-01**: Owner can set up a property through guided text conversation
+- [x] **PROP-02**: Owner can define rooms for a property (room-by-room structure)
 - [ ] **PROP-03**: Owner can send staging photos per room as reference standard
 - [ ] **PROP-04**: Owner can build property FAQ/guidebook via Q&A (WiFi, parking, trash, appliances, house rules, emergency contacts)
 - [ ] **PROP-05**: Owner can set deep clean cycle (every Nth clean)
@@ -44,7 +44,7 @@
 
 ### Communication
 
-- [ ] **COMM-01**: All cleaning interactions happen in three-way Telegram groups (owner + cleaner + bot)
+- [x] **COMM-01**: All cleaning interactions happen in three-way Telegram groups (owner + cleaner + bot)
 - [ ] **COMM-02**: Cleaning groups are persistent per cleaner
 - [ ] **COMM-03**: Owner can edit checklists, instructions, and property info on the fly via text from any thread
 - [ ] **COMM-04**: Bot carries property knowledge into any new group automatically
@@ -94,8 +94,8 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PROP-01 | Phase 1 | Pending |
-| PROP-02 | Phase 1 | Pending |
+| PROP-01 | Phase 1 | Complete |
+| PROP-02 | Phase 1 | Complete |
 | PROP-03 | Phase 1 | Pending |
 | PROP-04 | Phase 1 | Pending |
 | PROP-05 | Phase 1 | Pending |
@@ -119,7 +119,7 @@
 | GUEST-01 | Phase 4 | Pending |
 | GUEST-02 | Phase 4 | Pending |
 | GUEST-03 | Phase 4 | Pending |
-| COMM-01 | Phase 1 | Pending |
+| COMM-01 | Phase 1 | Complete |
 | COMM-02 | Phase 1 | Pending |
 | COMM-03 | Phase 1 | Pending |
 | COMM-04 | Phase 1 | Pending |
