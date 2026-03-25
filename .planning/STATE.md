@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 05-02-PLAN.md
-last_updated: "2026-03-25T17:28:15.260Z"
+stopped_at: Completed 06-01-PLAN.md
+last_updated: "2026-03-25T18:10:02.330Z"
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 12
-  completed_plans: 12
+  total_phases: 7
+  completed_phases: 6
+  total_plans: 13
+  completed_plans: 13
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Cleaners clean the property exactly the way the owner wants it, verified by AI photo comparison, managed entirely through text messaging.
-**Current focus:** Phase 05 — payments
+**Current focus:** Phase 06 — subscription-enforcement-cleanup
 
 ## Current Position
 
-Phase: 05 (payments) — EXECUTING
-Plan: 2 of 2
+Phase: 06 (subscription-enforcement-cleanup) — EXECUTING
+Plan: 1 of 1
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Plan: 2 of 2
 | Phase 04 P01 | 7min | 2 tasks | 6 files |
 | Phase 05 P01 | 6min | 2 tasks | 7 files |
 | Phase 05 P02 | 3min | 2 tasks | 4 files |
+| Phase 06 P01 | 3min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,8 @@ Recent decisions affecting current work:
 - [Phase 04]: Guest group detected by non-cleaner member presence; single-property auto-link; pendingFaqAdditions in-memory Map for FAQ reply flow
 - [Phase 05]: Store subscription as active based on Telegram successful_payment (billing source of truth), not Stripe subscription.status
 - [Phase 05]: Billing sync hooks are non-blocking: property operations succeed even if Stripe call fails
+- [Phase 06]: Variable-path dynamic import for seed-dev.js to avoid tsc rootDir conflict with scripts/ outside src/
+- [Phase 06]: Subscription gate in DM router placed after owner lookup, before feature handlers; billing and manage commands whitelisted
 
 ### Pending Todos
 
@@ -104,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T17:24:46.157Z
-Stopped at: Completed 05-02-PLAN.md
+Last session: 2026-03-25T18:10:02.328Z
+Stopped at: Completed 06-01-PLAN.md
 Resume file: None
