@@ -168,6 +168,19 @@ export interface InventoryPhoto {
   created_at: string;
 }
 
+export interface GuestInteraction {
+  id: number;
+  property_id: number;
+  chat_id: number;
+  guest_telegram_id: number;
+  question: string;
+  answer: string | null;
+  matched_faq_id: number | null;
+  was_answered: number; // 0 or 1
+  owner_notified: number; // 0 or 1
+  created_at: string;
+}
+
 export interface ActiveInventorySession {
   sessionId: number;
   propertyId: number;

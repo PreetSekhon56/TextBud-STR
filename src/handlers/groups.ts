@@ -8,6 +8,7 @@ interface PendingGroupLink {
   cleanerTelegramId: number;
   cleanerFirstName: string;
   cleanerUsername: string | null;
+  groupType: 'cleaning' | 'guest';
 }
 
 const pendingGroupLinks = new Map<number, PendingGroupLink>();
@@ -65,32 +66,47 @@ export async function handlePropertySelection(ctx: Context): Promise<boolean> {
   const cleaner = db.prepare('SELECT * FROM cleaners WHERE telegram_id = ?').get(pending.cleanerTelegramId) as Cleaner;
 
   // Create telegram_groups row
+  const groupType = pending.groupType || 'cleaning';
+  const cleanerId = groupType === 'guest' ? null : cleaner.id;
   db.prepare(`
     INSERT INTO telegram_groups (chat_id, property_id, owner_id, cleaner_id, group_type, is_active)
-    VALUES (?, ?, ?, ?, 'cleaning', 1)
+    VALUES (?, ?, ?, ?, ?, 1)
     ON CONFLICT(chat_id) DO UPDATE SET
       property_id = excluded.property_id,
       owner_id = excluded.owner_id,
       cleaner_id = excluded.cleaner_id,
       group_type = excluded.group_type,
       is_active = 1
-  `).run(pending.chatId, property.id, owner.id, cleaner.id);
+  `).run(pending.chatId, property.id, owner.id, cleanerId, groupType);
 
   // Send welcome message to the GROUP
   try {
-    await ctx.telegram.sendMessage(
-      pending.chatId,
-      `Hi ${pending.cleanerFirstName}! I'm TextBud, ${owner.first_name}'s cleaning assistant for ${property.name}. ` +
-      `I'll guide you through each clean. Text me when you arrive!`
-    );
+    if (groupType === 'guest') {
+      await ctx.telegram.sendMessage(
+        pending.chatId,
+        `Hi! I'm TextBud, your property assistant for ${property.name}. Ask me anything about the property -- WiFi, parking, house rules, and more!`
+      );
+    } else {
+      await ctx.telegram.sendMessage(
+        pending.chatId,
+        `Hi ${pending.cleanerFirstName}! I'm TextBud, ${owner.first_name}'s cleaning assistant for ${property.name}. ` +
+        `I'll guide you through each clean. Text me when you arrive!`
+      );
+    }
   } catch (err) {
     console.error('Failed to send welcome message to group:', err);
   }
 
   // Confirm to owner via DM
-  await ctx.reply(
-    `Group linked to ${property.name}. ${pending.cleanerFirstName} is all set!`
-  );
+  if (groupType === 'guest') {
+    await ctx.reply(
+      `Guest group linked to ${property.name}. Guests can now ask questions about the property!`
+    );
+  } else {
+    await ctx.reply(
+      `Group linked to ${property.name}. ${pending.cleanerFirstName} is all set!`
+    );
+  }
 
   // Clear the pending link
   pendingGroupLinks.delete(ownerTelegramId);
@@ -108,7 +124,8 @@ async function startPropertyLinkingFlow(
   chatId: number,
   cleanerTelegramId: number,
   cleanerFirstName: string,
-  cleanerUsername: string | null
+  cleanerUsername: string | null,
+  groupType: 'cleaning' | 'guest' = 'cleaning'
 ): Promise<void> {
   const db = getDb();
 
@@ -136,6 +153,7 @@ async function startPropertyLinkingFlow(
     cleanerTelegramId,
     cleanerFirstName,
     cleanerUsername,
+    groupType,
   });
 
   // Build numbered property list
@@ -258,16 +276,62 @@ export function registerGroupHandlers(bot: Telegraf): void {
       return;
     }
 
-    // Both owner and cleaner identified -- start the property linking flow
-    await startPropertyLinkingFlow(
-      ctx.telegram,
-      owner.telegram_id,
-      owner,
-      chatId,
-      cleanerUser.id,
-      cleanerUser.first_name,
-      cleanerUser.username || null
-    );
+    // Check if the non-owner member is a registered cleaner
+    const isCleaner = db.prepare('SELECT id FROM cleaners WHERE telegram_id = ?').get(cleanerUser.id);
+
+    if (isCleaner) {
+      // Known cleaner -- start cleaning group linking flow
+      await startPropertyLinkingFlow(
+        ctx.telegram,
+        owner.telegram_id,
+        owner,
+        chatId,
+        cleanerUser.id,
+        cleanerUser.first_name,
+        cleanerUser.username || null,
+        'cleaning'
+      );
+    } else {
+      // Not a registered cleaner -- treat as guest group
+      const properties = db.prepare(
+        'SELECT * FROM properties WHERE owner_id = ? AND setup_complete = 1 ORDER BY id'
+      ).all(owner.id) as Property[];
+
+      if (properties.length === 1) {
+        // Auto-link to the single property
+        db.prepare(`
+          INSERT INTO telegram_groups (chat_id, property_id, owner_id, cleaner_id, group_type, is_active)
+          VALUES (?, ?, ?, NULL, 'guest', 1)
+          ON CONFLICT(chat_id) DO UPDATE SET
+            property_id = excluded.property_id,
+            owner_id = excluded.owner_id,
+            cleaner_id = NULL,
+            group_type = 'guest',
+            is_active = 1
+        `).run(chatId, properties[0].id, owner.id);
+
+        try {
+          await ctx.telegram.sendMessage(
+            chatId,
+            `Hi! I'm TextBud, your property assistant for ${properties[0].name}. Ask me anything about the property -- WiFi, parking, house rules, and more!`
+          );
+        } catch (err) {
+          console.error('Failed to send guest welcome to group:', err);
+        }
+      } else {
+        // Multiple properties -- DM owner to pick one
+        await startPropertyLinkingFlow(
+          ctx.telegram,
+          owner.telegram_id,
+          owner,
+          chatId,
+          cleanerUser.id,
+          cleanerUser.first_name,
+          cleanerUser.username || null,
+          'guest'
+        );
+      }
+    }
   });
 
   /**
@@ -314,15 +378,59 @@ export function registerGroupHandlers(bot: Telegraf): void {
 
     if (!result || !result.owner) return;
 
-    // Start the linking flow with this new member as the cleaner
-    await startPropertyLinkingFlow(
-      ctx.telegram,
-      result.owner.telegram_id,
-      result.owner,
-      chatId,
-      newUser.id,
-      newUser.first_name,
-      newUser.username || null
-    );
+    // Check if this new member is a registered cleaner
+    const isCleanerUser = db.prepare('SELECT id FROM cleaners WHERE telegram_id = ?').get(newUser.id);
+
+    if (isCleanerUser) {
+      // Known cleaner -- start cleaning group linking flow
+      await startPropertyLinkingFlow(
+        ctx.telegram,
+        result.owner.telegram_id,
+        result.owner,
+        chatId,
+        newUser.id,
+        newUser.first_name,
+        newUser.username || null,
+        'cleaning'
+      );
+    } else {
+      // Not a cleaner -- treat as guest group
+      const properties = db.prepare(
+        'SELECT * FROM properties WHERE owner_id = ? AND setup_complete = 1 ORDER BY id'
+      ).all(result.owner.id) as Property[];
+
+      if (properties.length === 1) {
+        db.prepare(`
+          INSERT INTO telegram_groups (chat_id, property_id, owner_id, cleaner_id, group_type, is_active)
+          VALUES (?, ?, ?, NULL, 'guest', 1)
+          ON CONFLICT(chat_id) DO UPDATE SET
+            property_id = excluded.property_id,
+            owner_id = excluded.owner_id,
+            cleaner_id = NULL,
+            group_type = 'guest',
+            is_active = 1
+        `).run(chatId, properties[0].id, result.owner.id);
+
+        try {
+          await ctx.telegram.sendMessage(
+            chatId,
+            `Hi! I'm TextBud, your property assistant for ${properties[0].name}. Ask me anything about the property -- WiFi, parking, house rules, and more!`
+          );
+        } catch (err) {
+          console.error('Failed to send guest welcome to group:', err);
+        }
+      } else {
+        await startPropertyLinkingFlow(
+          ctx.telegram,
+          result.owner.telegram_id,
+          result.owner,
+          chatId,
+          newUser.id,
+          newUser.first_name,
+          newUser.username || null,
+          'guest'
+        );
+      }
+    }
   });
 }
