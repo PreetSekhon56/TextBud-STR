@@ -137,9 +137,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Property Setup | 4/4 | Complete   | 2026-03-24 |
-| 2. Cleaning Workflow | 0/3 | In Progress | - |
+| 2. Cleaning Workflow | 3/3 | Complete   | 2026-03-25 |
 | 3. Reporting & Inventory | 2/2 | Complete   | 2026-03-25 |
-| 4. Guest Support | 0/1 | Not started | - |
+| 4. Guest Support | 1/1 | Complete   | 2026-03-25 |
 | 5. Payments | 2/2 | Complete   | 2026-03-25 |
 | 6. Subscription Enforcement & Cleanup | 1/1 | Complete   | 2026-03-25 |
 | 7. Floor Plan Generation | 2/2 | Complete   | 2026-03-25 |

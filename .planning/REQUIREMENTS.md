@@ -130,8 +130,8 @@
 
 **Coverage:**
 - v1 requirements: 33 total
-- Satisfied: 31
-- Pending (gap closure): 2 (PROP-08, PROP-09)
+- Satisfied: 33
+- Pending (gap closure): 0
 - Mapped to phases: 33
 - Unmapped: 0
 
