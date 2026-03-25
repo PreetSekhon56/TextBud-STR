@@ -4,6 +4,7 @@ import { Room, TelegramGroup, Cleaner, Property, CleaningSession } from '../type
 import { sendRoomChecklist } from './cleaning-checklist.js';
 import { sendCompletionReport } from './reporting.js';
 import { startInventoryWalkthrough } from './inventory.js';
+import { generateFloorPlanIfNeeded } from './floor-plan.js';
 
 // --- Check-in / completion intent patterns ---
 
@@ -368,6 +369,10 @@ export function registerCleaningHandlers(bot: Telegraf): void {
       .run(fileId, session.sessionId);
 
     session.entryVideoReceived = true;
+
+    // Fire-and-forget: generate floor plan asynchronously, don't block cleaning flow
+    generateFloorPlanIfNeeded(bot, session.propertyId, fileId)
+      .catch(err => console.error('[FLOOR-PLAN] Trigger failed:', err));
 
     await ctx.reply("Got it! Entry video recorded. Now let's get started with the cleaning.");
 

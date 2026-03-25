@@ -19,6 +19,7 @@ import { registerInventoryHandlers, activeInventorySessions, handleInventoryResp
 import { registerInventorySetupHandlers } from './handlers/inventory-setup.js';
 import { registerGuestHandlers, handleGuestMessage, pendingFaqAdditions } from './handlers/guest.js';
 import { registerPaymentHandlers, handlePaymentMessage, hasActiveSubscription } from './handlers/payments.js';
+import { handleFloorPlanRequest, isFloorPlanRequest } from './handlers/floor-plan.js';
 import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -223,7 +224,8 @@ bot.on('text', async (ctx, next) => {
       '- "new property" to set up a new one\n' +
       '- "edit [something]" to change property details\n' +
       '- "subscribe" to start your subscription\n' +
-      '- "my plan" to check subscription status'
+      '- "my plan" to check subscription status\n' +
+      '- "floor plan" (in a group) to view the property floor plan'
     );
   }
 });
@@ -238,6 +240,12 @@ bot.on('text', async (ctx) => {
   ).get(ctx.chat.id) as TelegramGroup | undefined;
 
   if (!group) return; // Not a linked group, ignore
+
+  // Floor plan request -- works in both cleaning and guest groups
+  if (ctx.message && 'text' in ctx.message && isFloorPlanRequest(ctx.message.text)) {
+    await handleFloorPlanRequest(ctx, group);
+    return;
+  }
 
   // Guest group routing
   if (group.group_type === 'guest') {
