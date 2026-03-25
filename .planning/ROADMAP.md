@@ -64,10 +64,11 @@ Plans:
   2. After cleaning completion, cleaner walks through inventory item-by-item via text and can photograph supplies for AI-based inventory level detection
   3. Low-stock items are automatically flagged to the owner
   4. Inventory consumption data is stored persistently to support future ordering system
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
+- [ ] 03-01-PLAN.md -- Completion report: room-by-room photos, AI verdicts, checklist status, DB storage
+- [ ] 03-02-PLAN.md -- Inventory walkthrough, setup, low-stock alerts, receipt scanning, restock commands
 
 ### Phase 4: Guest Support
 **Goal**: Guests get instant answers to property questions through Telegram, with unknown questions routed to the owner to build a self-improving knowledge base
@@ -104,6 +105,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Foundation & Property Setup | 4/4 | Complete   | 2026-03-24 |
 | 2. Cleaning Workflow | 0/3 | In Progress | - |
-| 3. Reporting & Inventory | 0/? | Not started | - |
+| 3. Reporting & Inventory | 0/2 | Not started | - |
 | 4. Guest Support | 0/? | Not started | - |
 | 5. Payments | 0/? | Not started | - |
