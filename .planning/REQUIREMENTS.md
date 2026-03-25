@@ -53,8 +53,8 @@
 
 - [x] **PAY-01**: Owner can subscribe to TextBud via Telegram Payments (Stripe backend, Apple Pay / Google Pay)
 - [x] **PAY-02**: Subscription is billed per property per month
-- [ ] **PAY-03**: Owner can add/remove properties and billing adjusts automatically
-- [ ] **PAY-04**: Owner can view subscription status and cancel via text
+- [x] **PAY-03**: Owner can add/remove properties and billing adjusts automatically
+- [x] **PAY-04**: Owner can view subscription status and cancel via text
 
 ## v2 Requirements
 
@@ -125,8 +125,8 @@
 | COMM-04 | Phase 1 | Complete |
 | PAY-01 | Phase 5 | Complete |
 | PAY-02 | Phase 5 | Complete |
-| PAY-03 | Phase 5 | Pending |
-| PAY-04 | Phase 5 | Pending |
+| PAY-03 | Phase 5 | Complete |
+| PAY-04 | Phase 5 | Complete |
 
 **Coverage:**
 - v1 requirements: 33 total

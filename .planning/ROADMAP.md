@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2: Cleaning Workflow** - Cleaner check-in, sequential checklists, entry video, AI photo comparison, real-time flagging
 - [x] **Phase 3: Reporting & Inventory** - Completion reports, inventory walkthrough, AI inventory detection, low-stock alerts (completed 2026-03-25)
 - [ ] **Phase 4: Guest Support** - Guest FAQ answers, unknown question routing, self-improving knowledge base
-- [ ] **Phase 5: Payments** - Telegram Payments via Stripe, per-property subscriptions, Apple Pay / Google Pay
+- [x] **Phase 5: Payments** - Telegram Payments via Stripe, per-property subscriptions, Apple Pay / Google Pay (completed 2026-03-25)
 
 ## Phase Details
 
@@ -108,4 +108,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Cleaning Workflow | 0/3 | In Progress | - |
 | 3. Reporting & Inventory | 2/2 | Complete   | 2026-03-25 |
 | 4. Guest Support | 0/1 | Not started | - |
-| 5. Payments | 0/2 | Not started | - |
+| 5. Payments | 2/2 | Complete   | 2026-03-25 |
