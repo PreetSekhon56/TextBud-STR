@@ -1,6 +1,7 @@
 import { Context } from 'telegraf';
 import { getDb } from '../db/connection.js';
 import { SetupSession, Property, Room } from '../types/index.js';
+import { syncSubscriptionQuantity } from './payments.js';
 
 export async function promptReview(ctx: Context, propertyId: number): Promise<void> {
   const db = getDb();

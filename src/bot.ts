@@ -205,7 +205,9 @@ bot.on('text', async (ctx, next) => {
       "I didn't understand that. You can say:\n" +
       '- "my properties" to list your properties\n' +
       '- "new property" to set up a new one\n' +
-      '- "edit [something]" to change property details'
+      '- "edit [something]" to change property details\n' +
+      '- "subscribe" to start your subscription\n' +
+      '- "my plan" to check subscription status'
     );
   }
 });

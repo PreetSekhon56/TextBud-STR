@@ -9,6 +9,7 @@ import { handleFaqSetup, promptFaq } from './setup-faq.js';
 import { handleChecklistSetup, promptChecklist } from './setup-checklists.js';
 import { handleDeepCleanSetup, promptDeepClean } from './setup-deepclean.js';
 import { handleSetupReview, promptReview } from './setup-review.js';
+import { syncSubscriptionQuantity } from './payments.js';
 
 // Step order for the setup wizard
 const STEP_ORDER = ['name', 'rooms', 'photos', 'faq', 'checklists', 'deep_clean', 'review'] as const;
@@ -135,8 +136,11 @@ export function registerSetupHandlers(bot: Telegraf): void {
   });
 
   // Handle all text messages in DM for setup flow
-  bot.on(message('text'), async (ctx) => {
-    if (!isDM(ctx)) return;
+  bot.on(message('text'), async (ctx, next) => {
+    if (!isDM(ctx)) return next();
+
+    // Skip bot commands — let them fall through to bot.start() etc.
+    if (ctx.message.text.startsWith('/')) return next();
 
     const owner = getOwnerByTelegramId(ctx.from.id) as Owner | null;
     if (!owner) return;
@@ -183,6 +187,12 @@ export function registerSetupHandlers(bot: Telegraf): void {
         // Delete the property and session
         db.prepare('DELETE FROM setup_sessions WHERE id = ?').run(session.id);
         db.prepare('DELETE FROM properties WHERE id = ?').run(session.property_id);
+        // Sync subscription quantity (remove property from billing)
+        try {
+          await syncSubscriptionQuantity(owner.id);
+        } catch (err) {
+          console.error('[PAYMENTS] Failed to sync subscription quantity after property deletion:', err);
+        }
         await ctx.reply("Setup cancelled. Send \"new property\" whenever you're ready to start again.");
       } else {
         await ctx.reply("No active setup to cancel.");
@@ -279,6 +289,13 @@ export function registerSetupHandlers(bot: Telegraf): void {
         const result = await handleSetupReview(ctx, session);
         if (result === 'complete') {
           completeSession(session.id, session.property_id);
+          // Sync subscription quantity (add property to billing)
+          try {
+            await syncSubscriptionQuantity(session.owner_id);
+          } catch (err) {
+            console.error('[PAYMENTS] Failed to sync subscription quantity after property setup:', err);
+            // Non-blocking: don't fail property setup if billing sync fails
+          }
           const property = getPropertyById(session.property_id);
           await ctx.reply(
             `Property "${property?.name}" is all set! You can add it to a cleaning group anytime.\n\n` +
