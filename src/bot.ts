@@ -18,6 +18,7 @@ import { registerReportingHandlers } from './handlers/reporting.js';
 import { registerInventoryHandlers, activeInventorySessions, handleInventoryResponse } from './handlers/inventory.js';
 import { registerInventorySetupHandlers } from './handlers/inventory-setup.js';
 import { registerGuestHandlers, handleGuestMessage, pendingFaqAdditions } from './handlers/guest.js';
+import { registerPaymentHandlers, handlePaymentMessage } from './handlers/payments.js';
 import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -48,6 +49,7 @@ registerReportingHandlers(bot);
 registerInventoryHandlers(bot);
 registerInventorySetupHandlers(bot);
 registerGuestHandlers(bot);
+registerPaymentHandlers(bot);
 
 // Global error handler
 bot.catch((err: any, ctx: any) => {
@@ -185,6 +187,16 @@ bot.on('text', async (ctx, next) => {
       pendingFaqAdditions.delete(ownerTelegramId);
       return;
     }
+  }
+
+  // Priority 5.7: Payment/subscription triggers
+  if (/\b(subscribe|subscription|billing|my plan|cancel subscription|payment|start subscription)\b/i.test(text)) {
+    if (!owner) {
+      await ctx.reply('Please send /start first to register.');
+      return;
+    }
+    const handled = await handlePaymentMessage(ctx, owner);
+    if (handled) return;
   }
 
   // Priority 6: Unknown command -- show help
