@@ -127,3 +127,54 @@ export interface SessionChecklistProgress {
   checklist_item_id: number;
   completed_at: string;
 }
+
+export interface CompletionReport {
+  id: number;
+  session_id: number;
+  property_id: number;
+  report_data: string; // JSON blob
+  created_at: string;
+}
+
+export interface InventoryItem {
+  id: number;
+  property_id: number;
+  name: string;
+  par_level: number | null;
+  last_count: number | null;
+  last_counted_at: string | null;
+  sort_order: number;
+  is_active: number; // 0 or 1
+  created_at: string;
+}
+
+export interface InventoryCount {
+  id: number;
+  inventory_item_id: number;
+  session_id: number | null;
+  count: number;
+  previous_count: number | null;
+  consumption_delta: number | null;
+  counted_by: string; // 'cleaner' | 'owner'
+  notes: string | null;
+  created_at: string;
+}
+
+export interface InventoryPhoto {
+  id: number;
+  inventory_count_id: number;
+  file_id: string;
+  ai_analysis: string | null;
+  created_at: string;
+}
+
+export interface ActiveInventorySession {
+  sessionId: number;
+  propertyId: number;
+  chatId: number;
+  cleanerId: number;
+  items: InventoryItem[];
+  currentItemIndex: number;
+  counts: Map<number, number>;
+  photos: Map<number, string>;
+}
