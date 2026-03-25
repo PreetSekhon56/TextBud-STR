@@ -109,10 +109,10 @@ Plans:
   2. Owners with an active subscription can use all features as before
   3. Dead imports removed (syncSubscriptionQuantity in setup-review.ts, reloadActiveSessions in bot.ts)
   4. Mixed import/require in index.ts converted to consistent ESM imports
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 06-01: TBD
+- [ ] 06-01-PLAN.md -- Subscription gate in DM router, dead import cleanup, ESM conversion in index.ts
 
 ### Phase 7: Floor Plan Generation
 **Goal**: AI generates a rough floor plan from the cleaner's entry walkthrough video and makes it available as a navigational reference
@@ -140,5 +140,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 3. Reporting & Inventory | 2/2 | Complete   | 2026-03-25 |
 | 4. Guest Support | 0/1 | Not started | - |
 | 5. Payments | 2/2 | Complete   | 2026-03-25 |
-| 6. Subscription Enforcement & Cleanup | 0/? | Not started | - |
+| 6. Subscription Enforcement & Cleanup | 0/1 | Not started | - |
 | 7. Floor Plan Generation | 0/? | Not started | - |
