@@ -20,10 +20,10 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 - [x] TextBud requests milestone photos at timed intervals and compares them to staging photos using Claude Vision — *Validated in Phase 2*
 - [x] Owner receives completion report with photos, AI assessments, duration, flagged items, and checklist status — *Validated in Phase 3: Reporting & Inventory*
 - [x] Inventory walkthrough after each clean with item-by-item counts and low-stock alerts to owner — *Validated in Phase 3*
+- [x] Guest can text for property info; unknown questions flagged to owner (self-improving knowledge base) — *Validated in Phase 4: Guest Support*
 
 ### Active
 
-- [ ] Guest can text for property info; unknown questions flagged to owner (self-improving knowledge base)
 - [ ] Inventory data collection to support future backend ordering system
 
 ### Out of Scope
@@ -71,4 +71,4 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 | Sequential checklist delivery | Guide cleaners through the process rather than overwhelming with full list | — Pending |
 
 ---
-*Last updated: 2026-03-25 — Phase 3 (Reporting & Inventory) complete*
+*Last updated: 2026-03-25 — Phase 4 (Guest Support) complete*
