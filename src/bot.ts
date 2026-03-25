@@ -11,14 +11,14 @@ import {
   clearPendingPropertySelect,
 } from './handlers/manage.js';
 import { registerEditHandlers, handleEditMessage, hasActiveEditSession } from './handlers/edit.js';
-import { registerCleaningHandlers, reloadActiveSessions, handleGroupMessage } from './handlers/cleaning.js';
+import { registerCleaningHandlers, handleGroupMessage } from './handlers/cleaning.js';
 import { registerChecklistHandlers } from './handlers/cleaning-checklist.js';
 import { registerPhotoHandlers } from './handlers/cleaning-photos.js';
 import { registerReportingHandlers } from './handlers/reporting.js';
 import { registerInventoryHandlers, activeInventorySessions, handleInventoryResponse } from './handlers/inventory.js';
 import { registerInventorySetupHandlers } from './handlers/inventory-setup.js';
 import { registerGuestHandlers, handleGuestMessage, pendingFaqAdditions } from './handlers/guest.js';
-import { registerPaymentHandlers, handlePaymentMessage } from './handlers/payments.js';
+import { registerPaymentHandlers, handlePaymentMessage, hasActiveSubscription } from './handlers/payments.js';
 import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -120,6 +120,22 @@ bot.on('text', async (ctx, next) => {
 
   // Get owner (needed for remaining checks)
   const owner = getOwnerByTelegramId(ownerTelegramId) as Owner | null;
+
+  // Subscription gate: block premium features for unsubscribed owners
+  if (owner && !hasActiveSubscription(owner.id)) {
+    // Allow subscription/billing commands through
+    if (/\b(subscribe|subscription|billing|my plan|cancel subscription|payment|start subscription)\b/i.test(text)) {
+      // Fall through to payment handler below
+    } else if (isManageTrigger(text)) {
+      // Allow "my properties" so owners can see their properties
+    } else {
+      await ctx.reply(
+        'You need an active subscription to use this feature.\n\n' +
+        'Send "subscribe" to get started, or "my plan" to check your status.'
+      );
+      return;
+    }
+  }
 
   // Priority 3: Active setup session -- let setup handlers handle it
   // (except for manage triggers which should still work during setup)
