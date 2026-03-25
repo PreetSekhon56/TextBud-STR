@@ -21,6 +21,7 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 - [x] Owner receives completion report with photos, AI assessments, duration, flagged items, and checklist status — *Validated in Phase 3: Reporting & Inventory*
 - [x] Inventory walkthrough after each clean with item-by-item counts and low-stock alerts to owner — *Validated in Phase 3*
 - [x] Guest can text for property info; unknown questions flagged to owner (self-improving knowledge base) — *Validated in Phase 4: Guest Support*
+- [x] Owner can subscribe and pay via Telegram Payments (Stripe + Apple Pay / Google Pay), per-property billing — *Validated in Phase 5: Payments*
 
 ### Active
 
@@ -30,7 +31,7 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 
 - Smart home / door codes / auto-unlock — not core to cleaning workflow
 - Visual floor plan builder — unnecessary complexity for MVP
-- Payment processing — defer to post-MVP
+- ~~Payment processing — defer to post-MVP~~ (Implemented in Phase 5)
 - Owner dashboard / web portal — text-first, no dashboard
 - Mobile app — Telegram is the interface
 - Multi-channel (WhatsApp, Signal, iMessage) — Telegram only for MVP
@@ -71,4 +72,4 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 | Sequential checklist delivery | Guide cleaners through the process rather than overwhelming with full list | — Pending |
 
 ---
-*Last updated: 2026-03-25 — Phase 4 (Guest Support) complete*
+*Last updated: 2026-03-25 — Phase 5 (Payments) complete — ALL PHASES COMPLETE*
