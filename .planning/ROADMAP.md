@@ -17,6 +17,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Reporting & Inventory** - Completion reports, inventory walkthrough, AI inventory detection, low-stock alerts (completed 2026-03-25)
 - [ ] **Phase 4: Guest Support** - Guest FAQ answers, unknown question routing, self-improving knowledge base
 - [x] **Phase 5: Payments** - Telegram Payments via Stripe, per-property subscriptions, Apple Pay / Google Pay (completed 2026-03-25)
+- [ ] **Phase 6: Subscription Enforcement & Cleanup** - Wire subscription gating, clean dead imports, fix mixed module syntax (GAP CLOSURE)
+- [ ] **Phase 7: Floor Plan Generation** - AI floor plan from entry video, navigational reference for cleaners and guests (GAP CLOSURE)
 
 ## Phase Details
 
@@ -97,10 +99,39 @@ Plans:
 - [ ] 05-01-PLAN.md -- Stripe service, payments migration, Telegram Payments subscribe flow
 - [ ] 05-02-PLAN.md -- Subscription status/cancel commands, property add/remove billing sync
 
+### Phase 6: Subscription Enforcement & Cleanup
+**Goal**: Wire hasActiveSubscription() into the DM router to gate premium features behind active subscription, clean up dead imports and mixed module syntax
+**Depends on**: Phase 5
+**Requirements**: PAY-01
+**Gap Closure**: Closes integration gap (payments → all handlers) and flow gap (subscription enforcement) from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. Owners without an active subscription cannot use premium features (setup, cleaning, guest, inventory)
+  2. Owners with an active subscription can use all features as before
+  3. Dead imports removed (syncSubscriptionQuantity in setup-review.ts, reloadActiveSessions in bot.ts)
+  4. Mixed import/require in index.ts converted to consistent ESM imports
+**Plans**: TBD
+
+Plans:
+- [ ] 06-01: TBD
+
+### Phase 7: Floor Plan Generation
+**Goal**: AI generates a rough floor plan from the cleaner's entry walkthrough video and makes it available as a navigational reference
+**Depends on**: Phase 2
+**Requirements**: PROP-08, PROP-09
+**Gap Closure**: Closes orphaned requirements PROP-08 and PROP-09 from v1.0 audit
+**Success Criteria** (what must be TRUE):
+  1. After a cleaner submits an entry walkthrough video, AI extracts frames and generates a room-connectivity floor plan
+  2. Floor plan is stored and associated with the property
+  3. Cleaners and guests can request the floor plan via text command
+**Plans**: TBD
+
+Plans:
+- [ ] 07-01: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -109,3 +140,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 3. Reporting & Inventory | 2/2 | Complete   | 2026-03-25 |
 | 4. Guest Support | 0/1 | Not started | - |
 | 5. Payments | 2/2 | Complete   | 2026-03-25 |
+| 6. Subscription Enforcement & Cleanup | 0/? | Not started | - |
+| 7. Floor Plan Generation | 0/? | Not started | - |

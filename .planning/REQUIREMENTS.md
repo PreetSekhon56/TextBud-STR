@@ -101,8 +101,8 @@
 | PROP-05 | Phase 1 | Complete |
 | PROP-06 | Phase 1 | Complete |
 | PROP-07 | Phase 1 | Complete |
-| PROP-08 | Phase 2 | Pending |
-| PROP-09 | Phase 2 | Pending |
+| PROP-08 | Phase 7 | Pending |
+| PROP-09 | Phase 7 | Pending |
 | CLEAN-01 | Phase 2 | Complete |
 | CLEAN-02 | Phase 2 | Complete |
 | CLEAN-03 | Phase 2 | Complete |
@@ -130,6 +130,8 @@
 
 **Coverage:**
 - v1 requirements: 33 total
+- Satisfied: 31
+- Pending (gap closure): 2 (PROP-08, PROP-09)
 - Mapped to phases: 33
 - Unmapped: 0
 
