@@ -1,7 +1,13 @@
 import { Telegraf, Context } from 'telegraf';
 import { getDb } from '../db/connection.js';
 import { Owner, Subscription } from '../types/index.js';
-import { createStripeCustomer, createSubscription as createStripeSub } from '../services/stripe.js';
+import {
+  createStripeCustomer,
+  createSubscription as createStripeSub,
+  cancelSubscription,
+  updateSubscriptionQuantity,
+  getSubscriptionStatus,
+} from '../services/stripe.js';
 
 const PRICE_PER_PROPERTY_CENTS = parseInt(process.env.PRICE_PER_PROPERTY_CENTS || '2999', 10);
 
@@ -80,11 +86,19 @@ export function registerPaymentHandlers(bot: Telegraf) {
 export async function handlePaymentMessage(ctx: Context, owner: Owner): Promise<boolean> {
   const text = ((ctx.message as any)?.text || '').trim().toLowerCase();
 
+  if (/\b(my plan|billing|subscription status)\b/i.test(text)) {
+    return await handleStatus(ctx, owner);
+  }
+
+  if (/\b(cancel subscription|cancel my plan)\b/i.test(text)) {
+    return await handleCancel(ctx, owner);
+  }
+
   if (/\b(subscribe|start subscription)\b/i.test(text)) {
     return await handleSubscribe(ctx, owner);
   }
 
-  return false; // not handled -- Plan 02 adds status/cancel
+  return false;
 }
 
 async function handleSubscribe(ctx: Context, owner: Owner): Promise<boolean> {
@@ -125,6 +139,134 @@ async function handleSubscribe(ctx: Context, owner: Owner): Promise<boolean> {
   });
 
   return true;
+}
+
+async function handleStatus(ctx: Context, owner: Owner): Promise<boolean> {
+  const db = getDb();
+  const sub = db.prepare(
+    'SELECT * FROM subscriptions WHERE owner_id = ? ORDER BY id DESC LIMIT 1'
+  ).get(owner.id) as Subscription | undefined;
+
+  if (!sub) {
+    await ctx.reply("You don't have a subscription yet. Say 'subscribe' to get started.");
+    return true;
+  }
+
+  // Fetch fresh data from Stripe if we have a subscription ID
+  if (sub.stripe_subscription_id) {
+    try {
+      const stripeSub = await getSubscriptionStatus(sub.stripe_subscription_id);
+      const item = stripeSub.items.data[0];
+      // Update local DB with fresh Stripe data
+      db.prepare(`
+        UPDATE subscriptions
+        SET status = ?, current_period_end = datetime(?, 'unixepoch'), cancel_at_period_end = ?, updated_at = datetime('now')
+        WHERE id = ?
+      `).run(
+        sub.status === 'active' ? 'active' : stripeSub.status, // keep 'active' if locally active (Telegram is billing source of truth)
+        item.current_period_end,
+        stripeSub.cancel_at_period_end ? 1 : 0,
+        sub.id,
+      );
+      // Update local values for display
+      sub.current_period_end = new Date((item.current_period_end as number) * 1000).toISOString();
+      sub.cancel_at_period_end = stripeSub.cancel_at_period_end ? 1 : 0;
+    } catch (err) {
+      console.error('[PAYMENTS] Failed to fetch Stripe subscription status:', err);
+      // Continue with local data
+    }
+  }
+
+  const monthlyCost = ((sub.quantity * PRICE_PER_PROPERTY_CENTS) / 100).toFixed(2);
+  const nextBilling = sub.current_period_end
+    ? new Date(sub.current_period_end).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    : 'Unknown';
+
+  let message = `Your TextBud Plan:\n` +
+    `Status: ${sub.status.charAt(0).toUpperCase() + sub.status.slice(1)}\n` +
+    `Properties: ${sub.quantity}\n` +
+    `Monthly cost: $${monthlyCost}\n` +
+    `Next billing: ${nextBilling}`;
+
+  if (sub.cancel_at_period_end) {
+    message += '\nCancels at end of billing period';
+  } else {
+    message += '\n\nSay "cancel subscription" to cancel.';
+  }
+
+  await ctx.reply(message);
+  return true;
+}
+
+async function handleCancel(ctx: Context, owner: Owner): Promise<boolean> {
+  const db = getDb();
+  const sub = db.prepare(
+    'SELECT * FROM subscriptions WHERE owner_id = ? AND status IN (?, ?) ORDER BY id DESC LIMIT 1'
+  ).get(owner.id, 'active', 'trialing') as Subscription | undefined;
+
+  if (!sub) {
+    await ctx.reply("You don't have an active subscription to cancel.");
+    return true;
+  }
+
+  if (sub.cancel_at_period_end) {
+    await ctx.reply('Your subscription is already set to cancel at the end of the current billing period.');
+    return true;
+  }
+
+  if (!sub.stripe_subscription_id) {
+    await ctx.reply('Unable to cancel subscription. Please contact support.');
+    return true;
+  }
+
+  try {
+    const updated = await cancelSubscription(sub.stripe_subscription_id);
+    const item = updated.items.data[0];
+    db.prepare(
+      "UPDATE subscriptions SET cancel_at_period_end = 1, status = ?, updated_at = datetime('now') WHERE id = ?"
+    ).run(sub.status, sub.id); // keep current status (active until period end)
+
+    const periodEnd = sub.current_period_end
+      ? new Date(sub.current_period_end).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+      : 'the end of your billing period';
+
+    await ctx.reply(
+      `Your subscription has been canceled. You'll keep access until ${periodEnd}. ` +
+      `Say 'subscribe' anytime to resubscribe.`
+    );
+  } catch (err) {
+    console.error('[PAYMENTS] Failed to cancel subscription:', err);
+    await ctx.reply('There was an error canceling your subscription. Please try again or contact support.');
+  }
+
+  return true;
+}
+
+export async function syncSubscriptionQuantity(ownerId: number): Promise<void> {
+  const db = getDb();
+  const sub = db.prepare(
+    'SELECT * FROM subscriptions WHERE owner_id = ? AND status IN (?, ?) AND cancel_at_period_end = 0'
+  ).get(ownerId, 'active', 'trialing') as Subscription | undefined;
+  if (!sub || !sub.stripe_subscription_id) return;
+
+  const propertyCount = (db.prepare(
+    'SELECT COUNT(*) as count FROM properties WHERE owner_id = ? AND setup_complete = 1'
+  ).get(ownerId) as { count: number }).count;
+
+  if (propertyCount === sub.quantity) return; // no change needed
+
+  if (propertyCount === 0) {
+    // No properties left -- cancel subscription
+    await cancelSubscription(sub.stripe_subscription_id);
+    db.prepare("UPDATE subscriptions SET cancel_at_period_end = 1, updated_at = datetime('now') WHERE id = ?").run(sub.id);
+    return;
+  }
+
+  // Update quantity in Stripe
+  await updateSubscriptionQuantity(sub.stripe_subscription_id, propertyCount);
+  db.prepare(
+    "UPDATE subscriptions SET quantity = ?, updated_at = datetime('now') WHERE id = ?"
+  ).run(propertyCount, sub.id);
 }
 
 export function getOwnerSubscription(ownerId: number): Subscription | undefined {
