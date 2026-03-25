@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: unknown
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-03-25T15:31:30.995Z"
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-03-25T17:18:47.749Z"
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 10
-  completed_plans: 10
+  total_plans: 12
+  completed_plans: 11
 ---
 
 # Project State
@@ -19,12 +19,12 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-24)
 
 **Core value:** Cleaners clean the property exactly the way the owner wants it, verified by AI photo comparison, managed entirely through text messaging.
-**Current focus:** Phase 04 — guest-support
+**Current focus:** Phase 05 — payments
 
 ## Current Position
 
-Phase: 04 (guest-support) — COMPLETE
-Plan: 1 of 1 (done)
+Phase: 05 (payments) — EXECUTING
+Plan: 2 of 2
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Plan: 1 of 1 (done)
 | Phase 03 P01 | 4min | 2 tasks | 6 files |
 | Phase 03 P02 | 4min | 2 tasks | 6 files |
 | Phase 04 P01 | 7min | 2 tasks | 6 files |
+| Phase 05 P01 | 6min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,7 @@ Recent decisions affecting current work:
 - [Phase 03]: Alarming drop detection: 2x average delta (5+ history) or 50% drop (<5 history)
 - [Phase 03]: Threshold recommendations: 2-clean buffer with 30% deviation trigger
 - [Phase 04]: Guest group detected by non-cleaner member presence; single-property auto-link; pendingFaqAdditions in-memory Map for FAQ reply flow
+- [Phase 05]: Store subscription as active based on Telegram successful_payment (billing source of truth), not Stripe subscription.status
 
 ### Pending Todos
 
@@ -100,6 +102,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-25T15:28:34.714Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-03-25T17:18:47.747Z
+Stopped at: Completed 05-01-PLAN.md
 Resume file: None
