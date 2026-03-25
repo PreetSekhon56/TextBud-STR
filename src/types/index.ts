@@ -177,4 +177,6 @@ export interface ActiveInventorySession {
   currentItemIndex: number;
   counts: Map<number, number>;
   photos: Map<number, string>;
+  waitingForInventoryPhoto: boolean;
+  lastActivity: number;
 }

@@ -41,6 +41,56 @@ export async function comparePhotos(
   }
 }
 
+export async function analyzeReceipt(receiptBase64: string): Promise<{ items: { name: string; quantity: number }[] }> {
+  const message = await anthropic.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 1024,
+    messages: [{
+      role: 'user',
+      content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: receiptBase64 } },
+        {
+          type: 'text',
+          text: 'Extract cleaning supply items from this store receipt. Return JSON only: {"items": [{"name": "item name", "quantity": 1}]}. Focus on: toilet paper, trash bags, soap, paper towels, cleaning products, laundry supplies, sponges. Ignore non-cleaning items like food.'
+        }
+      ]
+    }]
+  });
+  try {
+    const text = message.content[0].type === 'text' ? message.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return { items: [] };
+    return JSON.parse(jsonMatch[0]);
+  } catch {
+    return { items: [] };
+  }
+}
+
+export async function analyzeInventoryPhoto(photoBase64: string, itemName: string): Promise<{ estimatedCount: number | null; description: string }> {
+  const message = await anthropic.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 512,
+    messages: [{
+      role: 'user',
+      content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: photoBase64 } },
+        {
+          type: 'text',
+          text: `This is a photo of "${itemName}" in a supply closet. Estimate how many units are visible. Return JSON only: {"estimatedCount": <number or null>, "description": "brief description of what you see"}`
+        }
+      ]
+    }]
+  });
+  try {
+    const text = message.content[0].type === 'text' ? message.content[0].text : '';
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return { estimatedCount: null, description: 'Could not analyze photo' };
+    return JSON.parse(jsonMatch[0]);
+  } catch {
+    return { estimatedCount: null, description: 'Could not analyze photo' };
+  }
+}
+
 export async function downloadTelegramPhoto(fileLink: string): Promise<string> {
   const response = await fetch(fileLink);
   const buffer = Buffer.from(await response.arrayBuffer());
