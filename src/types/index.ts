@@ -193,3 +193,17 @@ export interface ActiveInventorySession {
   waitingForInventoryPhoto: boolean;
   lastActivity: number;
 }
+
+export interface Subscription {
+  id: number;
+  owner_id: number;
+  stripe_customer_id: string;
+  stripe_subscription_id: string | null;
+  status: 'pending' | 'active' | 'past_due' | 'canceled' | 'unpaid' | 'trialing';
+  quantity: number;
+  current_period_start: string | null;
+  current_period_end: string | null;
+  cancel_at_period_end: number; // 0 or 1
+  created_at: string;
+  updated_at: string;
+}
