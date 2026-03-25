@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 4: Guest Support** - Guest FAQ answers, unknown question routing, self-improving knowledge base
 - [x] **Phase 5: Payments** - Telegram Payments via Stripe, per-property subscriptions, Apple Pay / Google Pay (completed 2026-03-25)
 - [x] **Phase 6: Subscription Enforcement & Cleanup** - Wire subscription gating, clean dead imports, fix mixed module syntax (GAP CLOSURE) (completed 2026-03-25)
-- [ ] **Phase 7: Floor Plan Generation** - AI floor plan from entry video, navigational reference for cleaners and guests (GAP CLOSURE)
+- [x] **Phase 7: Floor Plan Generation** - AI floor plan from entry video, navigational reference for cleaners and guests (GAP CLOSURE) (completed 2026-03-25)
 
 ## Phase Details
 
@@ -142,4 +142,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 4. Guest Support | 0/1 | Not started | - |
 | 5. Payments | 2/2 | Complete   | 2026-03-25 |
 | 6. Subscription Enforcement & Cleanup | 1/1 | Complete   | 2026-03-25 |
-| 7. Floor Plan Generation | 0/2 | Not started | - |
+| 7. Floor Plan Generation | 2/2 | Complete   | 2026-03-25 |
