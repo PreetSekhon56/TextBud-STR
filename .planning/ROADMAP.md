@@ -78,10 +78,10 @@ Plans:
   1. Guest texts a question in a three-way Telegram group (guest + owner/manager + bot) and gets an instant answer from the property FAQ
   2. When the bot cannot answer a question, it flags the owner who can respond and optionally add the answer to the knowledge base for future use
   3. The knowledge base grows over time -- previously unknown questions that were answered by the owner are now answered automatically
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 04-01: TBD
+- [ ] 04-01-PLAN.md -- Guest group detection, Claude-powered FAQ matching, unknown question routing, self-improving knowledge base
 
 ### Phase 5: Payments
 **Goal**: Owners can subscribe and pay for TextBud per property via Telegram Payments with Apple Pay / Google Pay
@@ -106,5 +106,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation & Property Setup | 4/4 | Complete   | 2026-03-24 |
 | 2. Cleaning Workflow | 0/3 | In Progress | - |
 | 3. Reporting & Inventory | 2/2 | Complete   | 2026-03-25 |
-| 4. Guest Support | 0/? | Not started | - |
+| 4. Guest Support | 0/1 | Not started | - |
 | 5. Payments | 0/? | Not started | - |
