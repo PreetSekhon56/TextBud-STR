@@ -15,6 +15,7 @@ export interface Property {
   clean_count: number; // current count towards next deep clean
   setup_complete: boolean;
   setup_step: string | null; // tracks where owner is in setup wizard: 'rooms' | 'photos' | 'faq' | 'checklists' | 'deep_clean' | 'review' | null
+  floor_plan_svg: string | null;
   created_at: string;
 }
 
@@ -192,6 +193,11 @@ export interface ActiveInventorySession {
   photos: Map<number, string>;
   waitingForInventoryPhoto: boolean;
   lastActivity: number;
+}
+
+export interface RoomConnectivity {
+  rooms: { name: string; connectedTo: string[] }[];
+  walkOrder: string[];
 }
 
 export interface Subscription {
