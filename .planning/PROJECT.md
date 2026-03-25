@@ -16,13 +16,13 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 - [x] All interactions are three-way Telegram groups (owner + other party + bot) — *Validated in Phase 1*
 - [x] Owner can manage multiple properties — *Validated in Phase 1*
 - [x] Everything is editable on the fly via text (checklists, instructions, property info) from group or personal thread — *Validated in Phase 1*
+- [x] Cleaner checks in via text, receives sequential room-by-room checklist, and records entry video walkthrough on arrival — *Validated in Phase 2: Cleaning Workflow*
+- [x] TextBud requests milestone photos at timed intervals and compares them to staging photos using Claude Vision — *Validated in Phase 2*
+- [x] Owner receives completion report with photos, AI assessments, duration, flagged items, and checklist status — *Validated in Phase 3: Reporting & Inventory*
+- [x] Inventory walkthrough after each clean with item-by-item counts and low-stock alerts to owner — *Validated in Phase 3*
 
 ### Active
 
-- [ ] Cleaner checks in via text, receives sequential room-by-room checklist, and records entry video walkthrough on arrival
-- [ ] TextBud requests milestone photos at timed intervals and compares them to staging photos using Claude Vision
-- [ ] Owner receives completion report with photos, AI assessments, duration, flagged items, and checklist status
-- [ ] Inventory walkthrough after each clean with item-by-item counts and low-stock alerts to owner
 - [ ] Guest can text for property info; unknown questions flagged to owner (self-improving knowledge base)
 - [ ] Inventory data collection to support future backend ordering system
 
@@ -71,4 +71,4 @@ Cleaners clean the property exactly the way the owner wants it, verified by AI p
 | Sequential checklist delivery | Guide cleaners through the process rather than overwhelming with full list | — Pending |
 
 ---
-*Last updated: 2026-03-24 — Phase 1 (Foundation & Property Setup) complete*
+*Last updated: 2026-03-25 — Phase 3 (Reporting & Inventory) complete*
