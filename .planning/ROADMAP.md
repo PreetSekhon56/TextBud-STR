@@ -91,10 +91,11 @@ Plans:
   1. Owner can subscribe to TextBud via Telegram Payments using Apple Pay or Google Pay (Stripe backend)
   2. Subscription is billed per property per month — adding/removing properties adjusts billing automatically
   3. Owner can view subscription status and cancel via text conversation with the bot
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 05-01: TBD
+- [ ] 05-01-PLAN.md -- Stripe service, payments migration, Telegram Payments subscribe flow
+- [ ] 05-02-PLAN.md -- Subscription status/cancel commands, property add/remove billing sync
 
 ## Progress
 
@@ -107,4 +108,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Cleaning Workflow | 0/3 | In Progress | - |
 | 3. Reporting & Inventory | 2/2 | Complete   | 2026-03-25 |
 | 4. Guest Support | 0/1 | Not started | - |
-| 5. Payments | 0/? | Not started | - |
+| 5. Payments | 0/2 | Not started | - |
