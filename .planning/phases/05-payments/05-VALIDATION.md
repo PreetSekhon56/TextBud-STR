@@ -1,10 +1,11 @@
 ---
 phase: 05
 slug: payments
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: complete
+nyquist_compliant: true
+wave_0_complete: true
 created: 2026-03-25
+audited: 2026-03-25
 ---
 
 # Phase 05 — Validation Strategy
@@ -17,20 +18,20 @@ created: 2026-03-25
 
 | Property | Value |
 |----------|-------|
-| **Framework** | jest 29.x (ts-jest) |
-| **Config file** | jest.config.ts |
-| **Quick run command** | `npx jest --passWithNoTests --no-coverage` |
-| **Full suite command** | `npx jest --no-coverage` |
-| **Estimated runtime** | ~1 second |
+| **Framework** | Jest 30.3.0 + ts-jest 29.4.6 |
+| **Config file** | `jest.config.ts` |
+| **Quick run command** | `npx jest tests/payments/payments.test.ts` |
+| **Full suite command** | `npx jest` |
+| **Estimated runtime** | <1 second |
 
 ---
 
 ## Sampling Rate
 
-- **After every task commit:** Run `npx jest --passWithNoTests --no-coverage`
-- **After every plan wave:** Run `npx jest --no-coverage`
+- **After every task commit:** Run `npx jest tests/payments/payments.test.ts`
+- **After every plan wave:** Run `npx jest`
 - **Before `/gsd:verify-work`:** Full suite must be green
-- **Max feedback latency:** 5 seconds
+- **Max feedback latency:** <1 second
 
 ---
 
@@ -38,16 +39,18 @@ created: 2026-03-25
 
 | Task ID | Plan | Wave | Requirement | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|-----------|-------------------|-------------|--------|
-| 05-01-01 | 01 | 1 | PAY-01, PAY-02 | integration | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
-| 05-01-02 | 01 | 1 | PAY-03, PAY-04 | integration | `npx tsc --noEmit` | ❌ W0 | ⬜ pending |
+| 05-01-01 | 01 | 1 | PAY-01 | unit | `npx jest tests/payments/payments.test.ts` | yes | green |
+| 05-01-02 | 01 | 1 | PAY-02 | unit | `npx jest tests/payments/payments.test.ts` | yes | green |
+| 05-02-01 | 02 | 1 | PAY-03 | unit | `npx jest tests/payments/payments.test.ts` | yes | green |
+| 05-02-02 | 02 | 1 | PAY-04 | unit | `npx jest tests/payments/payments.test.ts` | yes | green |
 
-*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: pending -- green -- red -- flaky*
 
 ---
 
 ## Wave 0 Requirements
 
-*Existing infrastructure covers all phase requirements.*
+- [x] `tests/payments/payments.test.ts` -- PAY-01 through PAY-04: subscribe, per-property pricing, cancel, status
 
 ---
 
@@ -65,11 +68,11 @@ created: 2026-03-25
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 5s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 1s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** passed (audited 2026-03-25)
