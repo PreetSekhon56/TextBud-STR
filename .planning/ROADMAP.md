@@ -123,10 +123,11 @@ Plans:
   1. After a cleaner submits an entry walkthrough video, AI extracts frames and generates a room-connectivity floor plan
   2. Floor plan is stored and associated with the property
   3. Cleaners and guests can request the floor plan via text command
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 07-01: TBD
+- [ ] 07-01-PLAN.md -- Floor plan service: DB migration, types, FFmpeg frame extraction, Claude Vision analysis, SVG generation pipeline
+- [ ] 07-02-PLAN.md -- Telegram handlers: async trigger on entry video, floor plan request command for cleaners and guests
 
 ## Progress
 
@@ -141,4 +142,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 4. Guest Support | 0/1 | Not started | - |
 | 5. Payments | 2/2 | Complete   | 2026-03-25 |
 | 6. Subscription Enforcement & Cleanup | 1/1 | Complete   | 2026-03-25 |
-| 7. Floor Plan Generation | 0/? | Not started | - |
+| 7. Floor Plan Generation | 0/2 | Not started | - |
