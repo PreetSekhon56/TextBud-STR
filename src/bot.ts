@@ -17,6 +17,7 @@ import { registerPhotoHandlers } from './handlers/cleaning-photos.js';
 import { registerReportingHandlers } from './handlers/reporting.js';
 import { registerInventoryHandlers, activeInventorySessions, handleInventoryResponse } from './handlers/inventory.js';
 import { registerInventorySetupHandlers } from './handlers/inventory-setup.js';
+import { registerGuestHandlers, handleGuestMessage, pendingFaqAdditions } from './handlers/guest.js';
 import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -46,6 +47,7 @@ registerPhotoHandlers(bot);
 registerReportingHandlers(bot);
 registerInventoryHandlers(bot);
 registerInventorySetupHandlers(bot);
+registerGuestHandlers(bot);
 
 // Global error handler
 bot.catch((err: any, ctx: any) => {
@@ -160,6 +162,31 @@ bot.on('text', async (ctx, next) => {
     return next(); // Let inventory-setup handlers handle it
   }
 
+  // Priority 5.5: Pending FAQ addition from guest question
+  if (pendingFaqAdditions.has(ownerTelegramId)) {
+    const addFaqMatch = text.match(/^add faq:\s*(.+)/i);
+    if (addFaqMatch) {
+      const answer = addFaqMatch[1].trim();
+      const pending = pendingFaqAdditions.get(ownerTelegramId)!;
+      const db = getDb();
+      // Add to FAQ as 'custom' category
+      db.prepare(
+        'INSERT INTO faq_entries (property_id, category, question, answer) VALUES (?, ?, ?, ?)'
+      ).run(pending.propertyId, 'custom', pending.question, answer);
+      // Update the interaction record
+      db.prepare('UPDATE guest_interactions SET was_answered = 1, answer = ? WHERE id = ?').run(answer, pending.interactionId);
+      // Send the answer to the guest group
+      try {
+        await ctx.telegram.sendMessage(pending.chatId, `Re: "${pending.question}"\n\n${answer}`);
+      } catch (err) {
+        console.error('[GUEST] Failed to send answer to group:', err);
+      }
+      await ctx.reply(`Got it! I've added that to the FAQ and sent the answer to the guest.`);
+      pendingFaqAdditions.delete(ownerTelegramId);
+      return;
+    }
+  }
+
   // Priority 6: Unknown command -- show help
   if (owner) {
     await ctx.reply(
@@ -181,6 +208,12 @@ bot.on('text', async (ctx) => {
   ).get(ctx.chat.id) as TelegramGroup | undefined;
 
   if (!group) return; // Not a linked group, ignore
+
+  // Guest group routing
+  if (group.group_type === 'guest') {
+    await handleGuestMessage(ctx, group);
+    return;
+  }
 
   // Check for active inventory session
   const inventorySession = activeInventorySessions.get(ctx.chat.id);
