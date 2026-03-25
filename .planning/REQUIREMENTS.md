@@ -38,9 +38,9 @@
 
 ### Guest Support
 
-- [ ] **GUEST-01**: Guest can text TextBud for property info and get instant answers from FAQ
-- [ ] **GUEST-02**: Unknown questions flagged to owner with option to add answer to knowledge base
-- [ ] **GUEST-03**: Guest interactions happen in three-way Telegram group (guest + owner/manager + bot)
+- [x] **GUEST-01**: Guest can text TextBud for property info and get instant answers from FAQ
+- [x] **GUEST-02**: Unknown questions flagged to owner with option to add answer to knowledge base
+- [x] **GUEST-03**: Guest interactions happen in three-way Telegram group (guest + owner/manager + bot)
 
 ### Communication
 
@@ -116,9 +116,9 @@
 | REPT-03 | Phase 3 | Complete |
 | REPT-04 | Phase 3 | Complete |
 | REPT-05 | Phase 3 | Complete |
-| GUEST-01 | Phase 4 | Pending |
-| GUEST-02 | Phase 4 | Pending |
-| GUEST-03 | Phase 4 | Pending |
+| GUEST-01 | Phase 4 | Complete |
+| GUEST-02 | Phase 4 | Complete |
+| GUEST-03 | Phase 4 | Complete |
 | COMM-01 | Phase 1 | Complete |
 | COMM-02 | Phase 1 | Complete |
 | COMM-03 | Phase 1 | Complete |
