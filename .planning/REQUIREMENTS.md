@@ -14,7 +14,7 @@
 - [x] **PROP-05**: Owner can set deep clean cycle (every Nth clean)
 - [x] **PROP-06**: Owner can create standard clean checklist and deep clean checklist
 - [x] **PROP-07**: Owner can manage multiple properties
-- [ ] **PROP-08**: AI generates rough floor plan/room layout from cleaner's entry walkthrough video using Claude Vision
+- [x] **PROP-08**: AI generates rough floor plan/room layout from cleaner's entry walkthrough video using Claude Vision
 - [ ] **PROP-09**: Floor plan available to cleaners and guests as a navigational reference
 
 ### Cleaning Workflow
@@ -101,7 +101,7 @@
 | PROP-05 | Phase 1 | Complete |
 | PROP-06 | Phase 1 | Complete |
 | PROP-07 | Phase 1 | Complete |
-| PROP-08 | Phase 7 | Pending |
+| PROP-08 | Phase 7 | Complete |
 | PROP-09 | Phase 7 | Pending |
 | CLEAN-01 | Phase 2 | Complete |
 | CLEAN-02 | Phase 2 | Complete |
