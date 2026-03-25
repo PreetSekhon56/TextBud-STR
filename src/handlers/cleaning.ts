@@ -2,6 +2,7 @@ import { Telegraf, Context } from 'telegraf';
 import { getDb } from '../db/connection.js';
 import { Room, TelegramGroup, Cleaner, Property, CleaningSession } from '../types/index.js';
 import { sendRoomChecklist } from './cleaning-checklist.js';
+import { sendCompletionReport } from './reporting.js';
 
 // --- Check-in / completion intent patterns ---
 
@@ -183,31 +184,8 @@ export async function handleCompletion(ctx: Context, session: ActiveCleaningSess
   activeSessions.delete(chatId);
   pendingSkipDecisions.delete(chatId);
 
-  // Get session details for summary
-  const sessionRow = db.prepare('SELECT * FROM cleaning_sessions WHERE id = ?')
-    .get(session.sessionId) as CleaningSession;
-
-  const property = db.prepare('SELECT * FROM properties WHERE id = ?')
-    .get(session.propertyId) as Property;
-
-  const cleaner = db.prepare('SELECT * FROM cleaners WHERE id = ?')
-    .get(session.cleanerId) as Cleaner;
-
-  // Calculate duration
-  const now = new Date().toISOString();
-  const duration = calculateDuration(sessionRow.checked_in_at, now);
-
-  // Get comparison summary
-  const comparison = getComparisonSummary(session.sessionId);
-
-  // Build summary message
-  const summaryText = `All done! Cleaned ${property.name} in ${duration}.\n${comparison.passed}/${comparison.total} rooms passed. ${comparison.flagged} flagged.\nThanks, ${cleaner.first_name}!`;
-
-  await ctx.reply(summaryText);
-
-  // Store summary in DB
-  db.prepare('UPDATE cleaning_sessions SET summary = ? WHERE id = ?')
-    .run(summaryText, session.sessionId);
+  // Send full completion report
+  await sendCompletionReport(ctx, session);
 }
 
 // --- Group message handler ---
@@ -360,9 +338,10 @@ async function handleCheckIn(ctx: Context, group: TelegramGroup): Promise<void> 
 
 // --- Register handlers ---
 
+/** Call after initDb() to reload any in-progress cleaning sessions */
+export { reloadActiveSessions };
+
 export function registerCleaningHandlers(bot: Telegraf): void {
-  // Reload active sessions from DB so they survive bot restarts
-  reloadActiveSessions();
 
   // Entry video handler
   bot.on(['video', 'video_note'], async (ctx) => {

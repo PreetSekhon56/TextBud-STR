@@ -11,12 +11,19 @@ import {
   clearPendingPropertySelect,
 } from './handlers/manage.js';
 import { registerEditHandlers, handleEditMessage, hasActiveEditSession } from './handlers/edit.js';
-import { registerCleaningHandlers, handleGroupMessage } from './handlers/cleaning.js';
+import { registerCleaningHandlers, reloadActiveSessions, handleGroupMessage } from './handlers/cleaning.js';
 import { registerChecklistHandlers } from './handlers/cleaning-checklist.js';
 import { registerPhotoHandlers } from './handlers/cleaning-photos.js';
+import { registerReportingHandlers } from './handlers/reporting.js';
 import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
+
+// Debug: log all incoming updates
+bot.use((ctx, next) => {
+  console.log('[DEBUG] Update:', ctx.updateType, ctx.chat?.type, ctx.message && 'text' in ctx.message ? ctx.message.text : '', 'entities:', ctx.message && 'entities' in ctx.message ? JSON.stringify(ctx.message.entities) : 'none');
+  return next();
+});
 
 // Register group detection and property linking handlers
 registerGroupHandlers(bot);
@@ -34,9 +41,16 @@ registerEditHandlers(bot);
 registerCleaningHandlers(bot);
 registerChecklistHandlers(bot);
 registerPhotoHandlers(bot);
+registerReportingHandlers(bot);
+
+// Global error handler
+bot.catch((err: any, ctx: any) => {
+  console.error('[BOT ERROR]', err.message || err);
+});
 
 // /start in DM: register as owner
 bot.start(async (ctx) => {
+  console.log('[DEBUG] /start handler entered');
   if (ctx.chat.type !== 'private') return; // ignore /start in groups
 
   const db = getDb();
