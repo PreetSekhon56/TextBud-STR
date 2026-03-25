@@ -30,7 +30,7 @@
 
 ### Reporting
 
-- [ ] **REPT-01**: Owner receives completion report (time in/out, duration, all photos side-by-side with staging, AI assessment per room, flagged items, checklist status)
+- [x] **REPT-01**: Owner receives completion report (time in/out, duration, all photos side-by-side with staging, AI assessment per room, flagged items, checklist status)
 - [ ] **REPT-02**: Inventory walkthrough after clean — item-by-item counts via text
 - [ ] **REPT-03**: Cleaner can photograph supplies and AI registers inventory levels
 - [ ] **REPT-04**: Low-stock items flagged to owner
@@ -111,7 +111,7 @@
 | CLEAN-06 | Phase 2 | Complete |
 | CLEAN-07 | Phase 2 | Complete |
 | CLEAN-08 | Phase 2 | Complete |
-| REPT-01 | Phase 3 | Pending |
+| REPT-01 | Phase 3 | Complete |
 | REPT-02 | Phase 3 | Pending |
 | REPT-03 | Phase 3 | Pending |
 | REPT-04 | Phase 3 | Pending |
