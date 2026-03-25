@@ -15,6 +15,8 @@ import { registerCleaningHandlers, reloadActiveSessions, handleGroupMessage } fr
 import { registerChecklistHandlers } from './handlers/cleaning-checklist.js';
 import { registerPhotoHandlers } from './handlers/cleaning-photos.js';
 import { registerReportingHandlers } from './handlers/reporting.js';
+import { registerInventoryHandlers, activeInventorySessions, handleInventoryResponse } from './handlers/inventory.js';
+import { registerInventorySetupHandlers } from './handlers/inventory-setup.js';
 import { Owner, TelegramGroup } from './types/index.js';
 
 export const bot = new Telegraf(process.env.BOT_TOKEN!);
@@ -42,6 +44,8 @@ registerCleaningHandlers(bot);
 registerChecklistHandlers(bot);
 registerPhotoHandlers(bot);
 registerReportingHandlers(bot);
+registerInventoryHandlers(bot);
+registerInventorySetupHandlers(bot);
 
 // Global error handler
 bot.catch((err: any, ctx: any) => {
@@ -151,6 +155,11 @@ bot.on('text', async (ctx, next) => {
     }
   }
 
+  // Priority 5.3: Inventory setup/management
+  if (/\b(setup inventory|my inventory|show inventory|inventory for|restock)/i.test(text)) {
+    return next(); // Let inventory-setup handlers handle it
+  }
+
   // Priority 6: Unknown command -- show help
   if (owner) {
     await ctx.reply(
@@ -172,6 +181,13 @@ bot.on('text', async (ctx) => {
   ).get(ctx.chat.id) as TelegramGroup | undefined;
 
   if (!group) return; // Not a linked group, ignore
+
+  // Check for active inventory session
+  const inventorySession = activeInventorySessions.get(ctx.chat.id);
+  if (inventorySession) {
+    const handled = await handleInventoryResponse(ctx, inventorySession);
+    if (handled) return;
+  }
 
   await handleGroupMessage(ctx, group);
 });

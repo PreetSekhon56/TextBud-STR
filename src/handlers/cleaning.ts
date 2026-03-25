@@ -3,6 +3,7 @@ import { getDb } from '../db/connection.js';
 import { Room, TelegramGroup, Cleaner, Property, CleaningSession } from '../types/index.js';
 import { sendRoomChecklist } from './cleaning-checklist.js';
 import { sendCompletionReport } from './reporting.js';
+import { startInventoryWalkthrough } from './inventory.js';
 
 // --- Check-in / completion intent patterns ---
 
@@ -186,6 +187,9 @@ export async function handleCompletion(ctx: Context, session: ActiveCleaningSess
 
   // Send full completion report
   await sendCompletionReport(ctx, session);
+
+  // Trigger inventory walkthrough if configured
+  await startInventoryWalkthrough(ctx, session.sessionId, session.propertyId, session.cleanerId, chatId);
 }
 
 // --- Group message handler ---
